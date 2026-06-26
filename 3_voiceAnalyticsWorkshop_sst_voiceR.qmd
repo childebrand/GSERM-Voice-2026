@@ -1,0 +1,297 @@
+---
+title: "Voice Analytics Workshop - Speech-to-Text & voiceR"
+#author: Christian Hildebrand
+format: 
+  html:
+    theme: flatly
+    code-background: true
+    #code-fold: true
+    code-copy: true
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    #toc-title: VAW
+---
+
+#### Author & Contact:
+Christian Hildebrand <br>
+Full Professor of Marketing Analytics <br>
+Institute of Behavioral Science & Technology <br> 
+University of St. Gallen <br><br>
+Email: [christian.hildebrand@unisg.ch](mailto:christian.hildebrand@unisg.ch)
+<br>Web: [IBT-HSG Profile](https://www.ibt.unisg.ch/team/christian-hildebrand/) 
+<br>Social: [LinkedIn Profile](https://www.linkedin.com/in/christian-hildebrand/)
+<br> 
+<br> 
+
+```{r setup}
+#| echo: true
+#| label: setup
+#| include: false
+#Define path where you have the recordings inside root.dir argument
+knitr::opts_knit$set(root.dir = "voiceData/7_BRM_paper_data") 
+```
+
+
+# Background & Setup
+
+In this exercise, we will first load a new dataset, which consists of a set of audio recordings where speakers say "I go to the bar" in two different emotional tones: happy and sad. This paired design allows us to control for speaker-specific characteristics while examining how vocal features change with emotional expression.
+
+## Loading the Dataset
+We begin by reading all the audio files from our working directory and organizing them into a structured dataframe. Each filename follows the pattern `[speaker_id]_[emotion]_Bar.wav`, where the emotion is either "Happy" or "Sad."
+
+The `list.files()` function retrieves all files in the current working directory. We then create a dataframe called audioDat to store this information, setting `stringsAsFactors = FALSE` to ensure filenames are stored as character strings rather than factors. The `dim()` function shows us the number of rows (files) and columns in our dataframe.
+
+```{r}
+# Read all files in the specified folder
+files <- list.files()
+
+# Create a new data frame with file names as the first column
+audioDat <- data.frame(file_name = files, stringsAsFactors = FALSE)
+
+# Check the dimensions of the data frame
+dim(audioDat)
+```
+## Extracting Speaker and Emotion Information
+
+Next, we'll parse the filenames to extract two key pieces of information: the speaker ID and the emotional condition (happy or sad) directly from the filename.
+
+```{r}
+audioDat$user_id <- gsub("^(.+)_(Happy|Sad)_Bar\\.wav$", "\\1", audioDat$file_name)
+audioDat$emo <- gsub("^.+_(Happy|Sad)_Bar\\.wav$", "\\1", audioDat$file_name)
+```
+
+# Extracting Acoustic Features from Voice Recordings
+After loading our audio files using the `tuneR` package, we now need to extract meaningful acoustic features that characterize the vocal expressions in our happy and sad conditions. The `soundgen` package provides powerful tools for this purpose through its `analyze()` function we learned yesterday, which extracts a comprehensive set of acoustic measurements from audio files. 
+
+The process is as follows:
+1. *Process Files in a Loop*: We iterate through each audio file to extract features: The `cat()` function provides a progress indicator, showing which file is currently being processed
+`analyze(files[i], plot = FALSE)` calls soundgen's analyze function on each audio file. We set `plot = FALSE` to suppress the automatic generation of visualization plots during analysis. 
+
+2. *Extract Features*: The analyze() function returns a complex list object with two main components:
+  - $detailed: Frame-by-frame acoustic measurements
+  - $summary: Summary statistics across the entire recording
+
+3. *Create Feature Dataframe*: We convert the summary statistics to a dataframe:
+as.data.frame(result$summary) transforms the summary into a proper dataframe
+`feature_df$file_name <- audioDat$file_name[i]` adds the filename as a column for later identification. Each resulting dataframe contains a single row with numerous acoustic features. 
+
+4. *Store Results*: Each feature dataframe is stored as an element in our `feature_list` for later processing
+
+```{r}
+#| echo: false
+library(tuneR)    
+library(soundgen) 
+
+feature_list <- list()
+files <- list.files()
+
+for(i in 1:length(files)) {
+  # Print progress indicator
+  cat("Processing file", i, "of", length(files), ":", audioDat$file_name[i], "\n")
+  # Extract Features and append them
+  result <- analyze(files[i], plot = FALSE)
+  feature_df <- as.data.frame(result$summary)
+  feature_df$file_name <- audioDat$file_name[i]
+  # Store in the list
+  feature_list[[i]] <- feature_df
+}
+```
+
+After extracting acoustic features from each audio recording, our next step is to combine these features with the speaker and emotion metadata we organized earlier. This merging process creates a comprehensive dataset that links each recording's acoustic properties with its corresponding speaker ID and emotional condition.
+
+The `left_join(audioDat, combined_features, by = "file_name")` merges our original metadata (containing `file_name`, `speaker_id`, and `emotion`) with the combined acoustic features. The join is then performed using the `file_name` column as the common key.
+
+```{r}
+library(data.table)
+library(dplyr)
+combined_features <- rbindlist(feature_list, fill = TRUE)
+
+# Merge with the original metadata dataframe on file_name
+audioDatWithFeat <- left_join(audioDat, combined_features, by = "file_name")
+head(audioDatWithFeat)
+```
+
+# Speech-to-Text 
+
+We will now extend our toolkit to include the semantic content of speech by implementing speech-to-text capabilities using Large Language Models (LLMs).
+
+Speech-to-text technologies allow us to analyze both what users say and how they say it, providing a more comprehensive understanding of people's voice interactions.
+
+### Getting Started with Speech-to-Text
+
+Speech-to-text (STT) or Automatic Speech Recognition (ASR) converts spoken language into written text. While traditional STT systems relied on specialized acoustic and language models, recent advances in Large Language Models have dramatically improved transcription accuracy and accessibility.
+
+For this purpose, we'll use OpenAI's Whisper model through the `openai` R package, which provides a powerful and accessible speech-to-text solution.
+
+```{r}
+# Install the openai package if needed
+if (!require("openai")) {
+  install.packages("openai")
+}
+```
+
+Let's break down the next steps: 
+
+1. *API Authentication*: `Sys.setenv(OPENAI_API_KEY = "...")` sets our API key as an environment variable. Note: In an actual public document or shared repository, you should never include your actual API key. Instead, use placeholders and load the real key from a secure environment variable or configuration file.
+
+
+2. *File Selection*: `file_path <- audioDat$file_name[1]` selects the first audio file from our dataset. This assumes the audio files are in the current working directory. If the files are in a different location, you would need to construct the full path with `file.path()`.
+
+
+3. *Transcription Request*: `create_transcription()` is the core function that:
+  - Sends the audio file to OpenAI's API
+  - Specifies "whisper-1" as the model to use for transcription
+  - Returns the transcribed text and metadata
+
+
+```{r}
+library(openai)
+
+# Set your OpenAI API key (if not already set)
+Sys.setenv(OPENAI_API_KEY = "your-API-key")  # Replace with your actual API key
+
+# Assuming audioDat$file_name contains the filenames and you need the full paths
+# Get the full file path for the first file
+file_path <- audioDat$file_name[1]
+
+transcript <- create_transcription(
+    file = file_path,
+    model = "whisper-1"
+  )
+```
+
+
+Let's listen now to the different audiofiles to make sure it's correct. As we see, all actors followed the script correctly.
+
+```{r}
+#| echo: false
+listen(readWave(audioDat$file_name[1]))
+listen(readWave(audioDat$file_name[2]))
+listen(readWave(audioDat$file_name[3]))
+listen(readWave(audioDat$file_name[4]))
+```
+
+Instead of doing the exercise file-by-file, we can anow also perform the same logic we employed earlier when reading in and extracting all acoustic features by iterating through all files using a `loop`.
+
+```{r}
+#| echo: false
+# Create a new dataframe to store transcription results
+transcription_df <- data.frame(
+  file_name = character(0),
+  transcript = character(0),
+  stringsAsFactors = FALSE
+)
+
+# Loop through all files in audioDat
+for(i in 1:nrow(audioDat)) {
+      # Transcribe the audio
+      result <- create_transcription(
+        file = audioDat$file_name[i],
+        model = "whisper-1"
+      )
+      
+      # Add to the transcription dataframe
+      transcription_df <- rbind(
+        transcription_df,
+        data.frame(
+          file_name = audioDat$file_name[i],
+          transcript = result$text,
+          stringsAsFactors = FALSE
+        )
+      )
+  }
+```
+
+After extracting acoustic features and generating transcriptions for our audio recordings, we reach the final stage of our data preparation: combining all these elements into a comprehensive dataset that we can use for analysis and modeling.
+
+We merge our original metadata (`audioDat`) with the transcription results (`transcription_df`) and then merge our metadata-plus-transcription dataframe with our acoustic features, and finally save the new data file.
+
+```{r}
+#| echo: false
+audioWithTranscr <- merge(audioDat, transcription_df, by = "file_name")
+```
+
+```{r}
+#| echo: false
+audioWithFeatTranscrip <- merge(audioWithTranscr,combined_features)
+```
+
+```{r}
+#| echo: false
+write.csv(audioWithFeatTranscrip, "audioWithFeatTranscrip.csv")
+```
+
+
+# Streamlining Voice Analytics with the voiceR Package
+
+While our previous approach of using individual packages like tuneR, seewave, and soundgen gives us fine-grained control over the feature extraction process, it can be somewhat complex and time-consuming. In this section, we explore a more streamlined alternative using the voiceR package, which serves as a one-stop solution for voice analytics.
+
+## Loading Audio Files for voiceR
+
+First, we need to prepare our audio files in a format that's compatible with `voiceR` (a list of wave files). The resulting `wav_list` contains all our audio recordings as Wave objects, organized in a way that preserves the naming structure for proper metadata extraction by `voiceR`.
+
+```{r}
+#| echo: false
+wav_list <- list()
+for(i in 1:length(files)) {
+
+     wave_obj <- readWave(files[i])
+
+    # Store it in the list with the filename as the name
+    name <- gsub("\\.wav$", "", files[i])
+    
+    # Assign to the list with the name
+    wav_list[[name]] <- wave_obj
+}
+
+```
+
+The `autoExtract()` function is the powerhouse of the voiceR package:
+
+- *Comprehensive Input*: It takes our list of wave objects (wav_list) as input
+
+- *File Format Specification*: fileType="wav" indicates we're working with WAV audio files
+
+- *Pattern Recognition*: fileNamePattern = "ID_Condition" tells voiceR that our filenames follow a pattern where:
+  - The first part is an identifier (speaker ID)
+  - The second part is a condition (Happy or Sad)
+
+- *Separator Definition*: `sep = "_"` specifies the underscore as the delimiter between filename components
+
+- *Parallel Processing*: `parallel = TRUE` enables multithreading for faster processing of multiple files
+
+```{r}
+#| echo: false
+library(voiceR)
+voiceR_feat <- autoExtract(audioList = wav_list, fileType="wav", fileNamePattern = "ID_Condition", sep = "_", parallel = TRUE)
+```
+
+Finally, the `autoReport()` is option but gives you an automatically created summary of the results in written form.
+
+```{r}
+#| echo: false
+autoReport(voiceR_feat)
+```
+# Summary & Conclusion
+
+In this voice analytics workshop, we explored how to analyze emotional speech recordings using R. We developed a comprehensive workflow for examining how speakers express emotions through their voice, focusing on happy versus sad expressions of the phrase "I go to the bar."
+
+Our analysis covered several key areas:
+
+1. *Data Organization*: We loaded audio files and extracted speaker and emotion information from the filenames.
+
+2. *Acoustic Feature Extraction*: We implemented two approaches:
+
+- A detailed manual approach using soundgen that provided fine-grained control
+- A streamlined approach using `voiceR` that offered efficiency and built-in reporting
+
+
+3. *Speech-to-Text Processing*: We incorporated OpenAI's Whisper model to transcribe recordings and evaluate whether emotional expression affects speech recognition.
+
+4. *Integrated Analysis*: We combined metadata, acoustic features, and transcriptions into a unified dataset for comprehensive analysis.
+
+The results demonstrated clear acoustic differences between happy and sad emotional expressions. Happy speech typically showed higher pitch, greater loudness, and more pitch variability, while sad speech exhibited lower intensity, decreased pitch, and different voice quality characteristics.
+
+I hope our workshop showed you how voice analytics can reveal the acoustic signatures of emotional expression, with applications in psychology, human-computer interaction, and affective computing. The techniques presented here can be extended to analyze other emotions, languages, or speech contexts, providing powerful tools for understanding the rich information conveyed through the human voice.
+
