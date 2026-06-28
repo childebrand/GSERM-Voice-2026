@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.242">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Prof.&nbsp;Dr.&nbsp;Christian Hildebrand">
+
+<title>Voice Analytics for Behavioral Scientists</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/clipboard/clipboard.min.js"></script>
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-html/quarto.js"></script>
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-html/popper.min.js"></script>
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-html/anchor.min.js"></script>
+<link href="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="GSERM_voiceanalyticsWorkshop_Day1-5_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#welcome-logistics" id="toc-welcome-logistics" class="nav-link active" data-scroll-target="#welcome-logistics">Welcome &amp; Logistics</a></li>
+  <li><a href="#software-setup" id="toc-software-setup" class="nav-link" data-scroll-target="#software-setup">Software Setup</a>
+  <ul class="collapse">
+  <li><a href="#install-everything-once" id="toc-install-everything-once" class="nav-link" data-scroll-target="#install-everything-once">Install everything once</a></li>
+  <li><a href="#loading-all-packages-to-the-current-session" id="toc-loading-all-packages-to-the-current-session" class="nav-link" data-scroll-target="#loading-all-packages-to-the-current-session">Loading all packages to the current session</a></li>
+  </ul></li>
+  <li><a href="#day-1-foundations-audio-workflows" id="toc-day-1-foundations-audio-workflows" class="nav-link" data-scroll-target="#day-1-foundations-audio-workflows">Day 1: Foundations &amp; Audio Workflows</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#why-voice-data-matters" id="toc-why-voice-data-matters" class="nav-link" data-scroll-target="#why-voice-data-matters">Why voice data matters</a></li>
+  <li><a href="#theoretical-foundations" id="toc-theoretical-foundations" class="nav-link" data-scroll-target="#theoretical-foundations">Theoretical Foundations</a>
+  <ul class="collapse">
+  <li><a href="#linguistics" id="toc-linguistics" class="nav-link" data-scroll-target="#linguistics">Linguistics</a></li>
+  <li><a href="#sociolinguistics" id="toc-sociolinguistics" class="nav-link" data-scroll-target="#sociolinguistics">Sociolinguistics</a></li>
+  <li><a href="#sociophonetics" id="toc-sociophonetics" class="nav-link" data-scroll-target="#sociophonetics">Sociophonetics</a></li>
+  </ul></li>
+  <li><a href="#speech-production-anatomy" id="toc-speech-production-anatomy" class="nav-link" data-scroll-target="#speech-production-anatomy">Speech Production &amp; Anatomy</a></li>
+  <li><a href="#the-signal-from-air-pressure-to-r-objects" id="toc-the-signal-from-air-pressure-to-r-objects" class="nav-link" data-scroll-target="#the-signal-from-air-pressure-to-r-objects">The signal: From air pressure to R objects</a></li>
+  <li><a href="#first-audio-workflow" id="toc-first-audio-workflow" class="nav-link" data-scroll-target="#first-audio-workflow">First Audio Workflow</a>
+  <ul class="collapse">
+  <li><a href="#reading-and-playing-sound-files" id="toc-reading-and-playing-sound-files" class="nav-link" data-scroll-target="#reading-and-playing-sound-files">Reading and Playing Sound Files</a></li>
+  <li><a href="#visualizing-waveforms-spectrograms" id="toc-visualizing-waveforms-spectrograms" class="nav-link" data-scroll-target="#visualizing-waveforms-spectrograms">Visualizing Waveforms &amp; Spectrograms</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#capstone-checkpoint-day-1" id="toc-capstone-checkpoint-day-1" class="nav-link" data-scroll-target="#capstone-checkpoint-day-1">Capstone Checkpoint Day 1</a></li>
+  </ul></li>
+  <li><a href="#day-2-data-collection-preprocessing" id="toc-day-2-data-collection-preprocessing" class="nav-link" data-scroll-target="#day-2-data-collection-preprocessing">Day 2: Data Collection &amp; Preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals-1" id="toc-learning-goals-1" class="nav-link" data-scroll-target="#learning-goals-1">Learning goals</a></li>
+  <li><a href="#recording-protocol" id="toc-recording-protocol" class="nav-link" data-scroll-target="#recording-protocol">Recording protocol</a></li>
+  <li><a href="#notes-on-recommended-folder-structure-in-projects" id="toc-notes-on-recommended-folder-structure-in-projects" class="nav-link" data-scroll-target="#notes-on-recommended-folder-structure-in-projects">Notes on Recommended Folder Structure in Projects</a></li>
+  <li><a href="#preprocessing-pipeline" id="toc-preprocessing-pipeline" class="nav-link" data-scroll-target="#preprocessing-pipeline">Preprocessing Pipeline</a></li>
+  <li><a href="#application-1" id="toc-application-1" class="nav-link" data-scroll-target="#application-1">Application 1</a></li>
+  <li><a href="#application-2" id="toc-application-2" class="nav-link" data-scroll-target="#application-2">Application 2</a>
+  <ul class="collapse">
+  <li><a href="#batch-read-and-parse-metadata-from-filenames" id="toc-batch-read-and-parse-metadata-from-filenames" class="nav-link" data-scroll-target="#batch-read-and-parse-metadata-from-filenames">Batch-read and parse metadata from filenames</a></li>
+  </ul></li>
+  <li><a href="#capstone-checkpoint-day-2" id="toc-capstone-checkpoint-day-2" class="nav-link" data-scroll-target="#capstone-checkpoint-day-2">Capstone Checkpoint Day 2</a></li>
+  </ul></li>
+  <li><a href="#day-3-feature-extraction-construct-building" id="toc-day-3-feature-extraction-construct-building" class="nav-link" data-scroll-target="#day-3-feature-extraction-construct-building">Day 3: Feature Extraction &amp; Construct Building</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals-2" id="toc-learning-goals-2" class="nav-link" data-scroll-target="#learning-goals-2">Learning goals</a></li>
+  <li><a href="#feature-families" id="toc-feature-families" class="nav-link" data-scroll-target="#feature-families">Feature families</a></li>
+  <li><a href="#feature-extraction-in-r" id="toc-feature-extraction-in-r" class="nav-link" data-scroll-target="#feature-extraction-in-r">Feature Extraction in R</a>
+  <ul class="collapse">
+  <li><a href="#feature-extraction-via-soundgen" id="toc-feature-extraction-via-soundgen" class="nav-link" data-scroll-target="#feature-extraction-via-soundgen">Feature Extraction via <code>soundgen</code></a></li>
+  <li><a href="#batch-extraction-via-voicer" id="toc-batch-extraction-via-voicer" class="nav-link" data-scroll-target="#batch-extraction-via-voicer">Batch Extraction via <code>voiceR</code></a></li>
+  </ul></li>
+  <li><a href="#exercises-1" id="toc-exercises-1" class="nav-link" data-scroll-target="#exercises-1">Exercises</a>
+  <ul class="collapse">
+  <li><a href="#modeling-speaker-emotion" id="toc-modeling-speaker-emotion" class="nav-link" data-scroll-target="#modeling-speaker-emotion">Modeling Speaker Emotion</a></li>
+  </ul></li>
+  <li><a href="#capstone-checkpoint-3" id="toc-capstone-checkpoint-3" class="nav-link" data-scroll-target="#capstone-checkpoint-3">Capstone Checkpoint 3</a></li>
+  </ul></li>
+  <li><a href="#day-4-speech-to-text" id="toc-day-4-speech-to-text" class="nav-link" data-scroll-target="#day-4-speech-to-text">Day 4: Speech-to-Text</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals-3" id="toc-learning-goals-3" class="nav-link" data-scroll-target="#learning-goals-3">Learning goals</a></li>
+  <li><a href="#speech-to-text-and-asr-systems" id="toc-speech-to-text-and-asr-systems" class="nav-link" data-scroll-target="#speech-to-text-and-asr-systems">Speech-to-Text and ASR Systems</a>
+  <ul class="collapse">
+  <li><a href="#transcription-via-openais-whisper-api-in-r" id="toc-transcription-via-openais-whisper-api-in-r" class="nav-link" data-scroll-target="#transcription-via-openais-whisper-api-in-r">Transcription via OpenAI’s Whisper API in R</a></li>
+  <li><a href="#transcription-via-google-cloud-speech-to-text-in-r" id="toc-transcription-via-google-cloud-speech-to-text-in-r" class="nav-link" data-scroll-target="#transcription-via-google-cloud-speech-to-text-in-r">Transcription via Google Cloud Speech-to-Text in R</a></li>
+  </ul></li>
+  <li><a href="#advanced-extensions" id="toc-advanced-extensions" class="nav-link" data-scroll-target="#advanced-extensions">Advanced Extensions</a>
+  <ul class="collapse">
+  <li><a href="#audio-embeddings-with-talk" id="toc-audio-embeddings-with-talk" class="nav-link" data-scroll-target="#audio-embeddings-with-talk">Audio Embeddings with <code>talk</code></a></li>
+  <li><a href="#voice-agents-stt---llm---tts" id="toc-voice-agents-stt---llm---tts" class="nav-link" data-scroll-target="#voice-agents-stt---llm---tts">Voice Agents (STT -&gt; LLM -&gt; TTS)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#day-5-evaluation-your-capstone-projects" id="toc-day-5-evaluation-your-capstone-projects" class="nav-link" data-scroll-target="#day-5-evaluation-your-capstone-projects">Day 5: Evaluation &amp; Your Capstone Projects</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals-4" id="toc-learning-goals-4" class="nav-link" data-scroll-target="#learning-goals-4">Learning goals</a></li>
+  <li><a href="#voice-in-experimental-designs" id="toc-voice-in-experimental-designs" class="nav-link" data-scroll-target="#voice-in-experimental-designs">Voice in experimental designs</a></li>
+  <li><a href="#a-simple-evaluation-framework" id="toc-a-simple-evaluation-framework" class="nav-link" data-scroll-target="#a-simple-evaluation-framework">A simple evaluation framework:</a></li>
+  <li><a href="#capstone-report-outline" id="toc-capstone-report-outline" class="nav-link" data-scroll-target="#capstone-report-outline">Capstone Report Outline</a></li>
+  <li><a href="#course-summary-key-takeaways" id="toc-course-summary-key-takeaways" class="nav-link" data-scroll-target="#course-summary-key-takeaways">Course Summary &amp; Key Takeaways</a></li>
+  <li><a href="#further-resources" id="toc-further-resources" class="nav-link" data-scroll-target="#further-resources">Further Resources</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Voice Analytics for Behavioral Scientists</h1>
+<p class="subtitle lead">From Acoustic Features to Conversational AI Agents (5-Day Workshop)</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prof.&nbsp;Dr.&nbsp;Christian Hildebrand </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="course-instructor-contact" class="level4">
+<h4 class="anchored" data-anchor-id="course-instructor-contact">Course Instructor &amp; Contact:</h4>
+<p><strong>Prof.&nbsp;Dr.&nbsp;Christian Hildebrand</strong> <br> Full Professor of Marketing Analytics <br> Executive Director, Institute of Behavioral Science &amp; Technology (IBT-HSG) <br> University of St.&nbsp;Gallen <br><br> Email: <a href="mailto:christian.hildebrand@unisg.ch">christian.hildebrand@unisg.ch</a> <br> Web: <a href="https://ibt.unisg.ch">ibt.unisg.ch</a> | Social: <a href="https://www.linkedin.com/in/christian-hildebrand/">LinkedIn Profile</a></p>
+<hr>
+</section>
+<section id="welcome-logistics" class="level1">
+<h1>Welcome &amp; Logistics</h1>
+<p>Welcome to the 5-Day Voice Analytics Workshop at GSERM! This notebook serves as your interactive workspace for the entire course. We will cover the complete pipeline: from loading raw audio and extracting paralinguistic features to transcribing speech via LLMs and designing conversational AI agents.</p>
+<p>Let’s start by verifying that your R environment is properly set up and loading all the necessary packages.</p>
+</section>
+<section id="software-setup" class="level1">
+<h1>Software Setup</h1>
+<p>We work primarily in <strong>R / RStudio</strong> with <strong>Quarto</strong> for reproducible reporting, and reach into <strong>Python</strong> only through <strong><code>reticulate</code></strong> so that non-Python users never have to leave R.</p>
+<section id="install-everything-once" class="level2">
+<h2 class="anchored" data-anchor-id="install-everything-once">Install everything once</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Core audio &amp; analysis -------------------------------------------------</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tuneR"</span>, <span class="st">"seewave"</span>, <span class="st">"soundgen"</span>, <span class="st">"phonTools"</span>,  <span class="co"># acoustics</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"voiceR"</span>,                                       <span class="co"># batch extraction + reports</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>, <span class="st">"data.table"</span>,                      <span class="co"># data wrangling</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"caret"</span>, <span class="st">"pROC"</span>                                 <span class="co"># modelling / validation</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Speech-to-text, language &amp; embeddings ---------------------------------</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"openai"</span>,          <span class="co"># Whisper STT + LLM + TTS via the OpenAI API</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"reticulate"</span>,      <span class="co"># call Python from R (local Whisper, transformers)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"googleLanguageR"</span>, <span class="co"># Google Cloud Speech-to-Text &amp; Natural Language</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"text"</span>             <span class="co"># transformer text embeddings (Hugging Face)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 'talk' (sibling of 'text') turns recordings into text, audio features, or</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># embeddings; install from its repository when needed.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="loading-all-packages-to-the-current-session" class="level2">
+<h2 class="anchored" data-anchor-id="loading-all-packages-to-the-current-session">Loading all packages to the current session</h2>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Verify your setup
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Run <code>library(tuneR); library(seewave); library(soundgen)</code> with no errors. If that works, let’s load all packages.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Acoustics &amp; audio</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tuneR)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seewave)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(soundgen)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phonTools)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Batch feature extraction &amp; reporting</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(voiceR)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Speech-to-Text</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openai)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googleLanguageR)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Data wrangling &amp; analyses</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="day-1-foundations-audio-workflows" class="level1">
+<h1>Day 1: Foundations &amp; Audio Workflows</h1>
+<section id="learning-goals" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
+<p>By the end of Day 1, participants can:</p>
+<ul>
+<li>explain why voice is a behavioral data layer rather than merely an input channel;</li>
+<li>distinguish acoustic observations from psychological constructs;</li>
+<li>read, inspect, listen to, edit, and save WAV files in R;</li>
+<li>produce oscillograms, pitch tracks, formant plots, and spectrograms;</li>
+<li>develop your capstone idea we work toward in this course.</li>
+</ul>
+</section>
+<section id="why-voice-data-matters" class="level2">
+<h2 class="anchored" data-anchor-id="why-voice-data-matters">Why voice data matters</h2>
+<p>Voice can reveal information that surveys, click data, and raw text often miss:</p>
+<ul>
+<li>affective arousal in real time;</li>
+<li>hesitation, uncertainty, and cognitive load;</li>
+<li>prosodic stance, dominance, and confidence;</li>
+<li>interaction breakdowns and repair;</li>
+<li>social and linguistic context;</li>
+<li>human responses to AI agents.</li>
+</ul>
+</section>
+<section id="theoretical-foundations" class="level2">
+<h2 class="anchored" data-anchor-id="theoretical-foundations">Theoretical Foundations</h2>
+<p>Clicks, search terms, and retrospective surveys capture conscious decisions, but they often fail to capture real-time emotional fluctuations, cognitive load, or authentic visceral reactions. Paralinguistic features (how something is said, independent of the semantic text) provide a direct, physiological window into the speaker’s emotional state, stress levels, confidence, and personality. In what follows, I provide a very brief overview of the main fields and theoretical foundations.</p>
+<section id="linguistics" class="level3">
+<h3 class="anchored" data-anchor-id="linguistics">Linguistics</h3>
+<p>Linguistics studies the structure and use of language. For this course, the most useful parts are:</p>
+<ul>
+<li><strong>Phonetics:</strong> how speech sounds are produced, transmitted, and perceived.</li>
+<li><strong>Phonology:</strong> how sound categories work in a language.</li>
+<li><strong>Semantics:</strong> how words and sentences carry meaning.</li>
+<li><strong>Pragmatics and discourse:</strong> how meaning depends on context, interaction, turn-taking, repair, politeness, stance, and intention.</li>
+</ul>
+<p>The key lesson here is that speech is not just text with some additional auditory noise but that speech signals in itself carry meaning and provide us with a lens into people’s behavior.</p>
+</section>
+<section id="sociolinguistics" class="level3">
+<h3 class="anchored" data-anchor-id="sociolinguistics">Sociolinguistics</h3>
+<p>Sociolinguistics studies how language varies across social context, community, identity, power, and setting. It helps behavioral researchers remember that “variation” is not only measurement error. Accent, register, politeness, code-switching, and style shifting can be central to the phenomenon.</p>
+</section>
+<section id="sociophonetics" class="level3">
+<h3 class="anchored" data-anchor-id="sociophonetics">Sociophonetics</h3>
+<p>Sociophonetics connects fine-grained phonetic detail with social meaning. It asks how pitch, vowels, timing, voice quality, accent, and style index identity, stance, group membership, or social context. This matters for voice analytics because the same acoustic cue can reflect emotion, identity performance, health, recording setup, or interaction design. An important insight from sociophonetics is, for example, that various social categories like your socio-economic status, power within a group, ethnicity, etc. are all encoded in the way how you speak and not just what you say.</p>
+</section>
+</section>
+<section id="speech-production-anatomy" class="level2">
+<h2 class="anchored" data-anchor-id="speech-production-anatomy">Speech Production &amp; Anatomy</h2>
+<p>Beyond these foundational fields, it’s also important to realize that speech is also deeply connected to our physiology. Taller people typically have a lower pitch due to their larger larynx and vocal cords. Speech is broadly speaking produced by a three-step physical system: - <strong>Respiration (Lungs):</strong> The lungs act as the power source, pushing air upward. - <strong>Phonation (Vocal Folds):</strong> Air passes through the larynx, causing the vocal folds to vibrate. The rate of vibration determines the <strong>Fundamental Frequency (<span class="math inline">\(F_0\)</span> / pitch)</strong>. - <strong>Articulation &amp; Resonance (Vocal Tract):</strong> The vocal tract (mouth, nose, throat) filters the sound wave. Movements of the tongue, lips, and jaw create resonance peaks called <strong>Formants (<span class="math inline">\(F_1\)</span>, <span class="math inline">\(F_2\)</span>, <span class="math inline">\(F_3\)</span>)</strong>, which characterize vowels.</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note of Caution &amp; Construct Validity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Never jump directly from waveform to construct. Think of it as a sequence:</p>
+<p><code>construct -&gt; mechanism -&gt; expected vocal cue -&gt; feature -&gt; rival explanations -&gt; validation evidence</code>.</p>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Check-in:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write down one construct from your own research that might appear in voice. Then add one rival explanation that could produce the same acoustic cue.</p>
+</div>
+</div>
+</section>
+<section id="the-signal-from-air-pressure-to-r-objects" class="level2">
+<h2 class="anchored" data-anchor-id="the-signal-from-air-pressure-to-r-objects">The signal: From air pressure to R objects</h2>
+<p>Core vocabulary:</p>
+<ul>
+<li><strong>Amplitude:</strong> how far the signal moves from its midpoint; often related to loudness or energy.</li>
+<li><strong>Frequency:</strong> cycles per second; pitch is tied to fundamental frequency (<code>f0</code>).</li>
+<li><strong>Sampling rate:</strong> how many measurements per second are stored.</li>
+<li><strong>Channel:</strong> mono or stereo recording.</li>
+<li><strong>Bit depth:</strong> precision of each sample.</li>
+<li><strong>Wave object:</strong> an R representation of audio data used by packages such as <code>tuneR</code>, <code>seewave</code>, or <code>voiceR</code>.</li>
+</ul>
+<hr>
+</section>
+<section id="first-audio-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="first-audio-workflow">First Audio Workflow</h2>
+<p>We will begin with our first practical audio workflow using <code>tuneR</code> and <code>seewave</code>. We will analyze a user interaction where a person gets increasingly frustrated with their Amazon Alexa.</p>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="alexa_video.mp4"></video></div>
+<section id="reading-and-playing-sound-files" class="level3">
+<h3 class="anchored" data-anchor-id="reading-and-playing-sound-files">Reading and Playing Sound Files</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read audio files of the two Alexa commands</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cmd1 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cmd2 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">"voiceData/1_alexa/alexa_cmd2.wav"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structure of the Wave objects</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>cmd1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Wave Object
+    Number of Samples:      102051
+    Duration (seconds):     2.31
+    Samplingrate (Hertz):   44100
+    Channels (Mono/Stereo): Stereo
+    PCM (integer format):   TRUE
+    Bit (8/16/24/32/64):    16 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cmd2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Wave Object
+    Number of Samples:      137881
+    Duration (seconds):     3.13
+    Samplingrate (Hertz):   44100
+    Channels (Mono/Stereo): Stereo
+    PCM (integer format):   TRUE
+    Bit (8/16/24/32/64):    16 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Play the audio file (eval=FALSE is used here to avoid hanging during rendering)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># listen(cmd1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important Note For Mac Users
+</div>
+</div>
+<div class="callout-body-container callout-body" title="Mac audio playback">
+<p>If <code>listen()</code> throws a <em>“Permission denied”</em> error, point <code>tuneR</code> at the system player: <code>tuneR::setWavPlayer('/usr/bin/afplay')</code>.</p>
+</div>
+</div>
+<p>Calling the two sounds objects shows that they share identical sampling rates, channel numbers, and bit rates. However, we already see differences in duration, with the second sound file being 820 milliseconds longer than the first, something we further explore later when testing specific differences at the feature level.</p>
+<p>Note that the <code>listen()</code> function has an <code>f</code> argument, providing the options to directly manipulate the sampling frequency rate (while listening; not of the raw data).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">listen</span>(cmd1, <span class="at">f=</span>cmd1<span class="sc">@</span>samp.rate<span class="sc">*</span><span class="fl">1.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">listen</span>(cmd1, <span class="at">f=</span>cmd1<span class="sc">@</span>samp.rate<span class="sc">/</span><span class="fl">1.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-waveforms-spectrograms" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-waveforms-spectrograms">Visualizing Waveforms &amp; Spectrograms</h3>
+<p>An <strong>oscillogram</strong> displays amplitude (loudness) over time. A <strong>spectrogram</strong> displays frequency over time, with color intensity indicating amplitude. Let’s take a look at the breaks in the speech signal between commands. What do you think they reveal about the person?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot oscillograms comparing the two commands</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(cmd1, <span class="at">colwave=</span><span class="st">"black"</span>, <span class="at">title =</span> <span class="st">"First Command Waveform"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(cmd2, <span class="at">colwave=</span><span class="st">"blue"</span>, <span class="at">title =</span> <span class="st">"Second Command Waveform"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/visualize-audio-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The <code>spectro()</code> function by default only plots the frequency signal over time. With additional arguments to the function, we can further adjust the plotting range and also add a separate oscillogram on the bottom of the spectogram.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot spectrogram of the first command</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(cmd1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/spectrogram-default-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot spectrogram of the first command</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(cmd1, <span class="at">flim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>), <span class="at">osc=</span><span class="cn">TRUE</span>, <span class="at">dB=</span><span class="st">"max0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/spectrogram-audio-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Repetition: Read, plot, listen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Load <code>alexa_wakeword_1.wav</code>, <code>alexa_wakeword_2.wav</code>, and <code>alexa_wakeword_3.wav</code>; compare their durations.</li>
+<li>Plot an oscillogram and a spectrogram for each.</li>
+<li><code>listen()</code> to them. Which sounds more frustrated, and which <strong>visual</strong> cue tipped you off first?</li>
+</ol>
+</div>
+</div>
+<p>Now additional practice and extension. Let’s concatenate the three wake-words using the <code>bind()</code> function, plot the concatenated waveform and spectrogram, and fit a linear model to the fundamental frequency contour using <code>fund()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the wakewords</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>w1 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">"voiceData/1_alexa/alexa_wakeword_1.wav"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>w2 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">"voiceData/1_alexa/alexa_wakeword_2.wav"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>w3 <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="st">"voiceData/1_alexa/alexa_wakeword_3.wav"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate wakewords</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>wake_all <span class="ot">&lt;-</span> <span class="fu">bind</span>(w1, w2, w3)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot spectrogram</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">spectro</span>(wake_all, <span class="at">flim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6</span>), <span class="at">osc=</span><span class="cn">TRUE</span>, <span class="at">title=</span><span class="st">"All Wakewords Spectrogram"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/ex-1-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and plot F0 contour</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">&lt;-</span> <span class="fu">fund</span>(wake_all, <span class="at">threshold=</span><span class="dv">1</span>, <span class="at">plot=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit linear trend to show pitch change</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(ff[, <span class="dv">2</span>] <span class="sc">~</span> ff[, <span class="dv">1</span>])</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(mod, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/ex-1-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To complete our first day, we can now also save this new object. The seewave package offers the <code>savewav( )</code> function, designed for storing R sound objects as .wav files.</p>
+<ol type="1">
+<li><p><strong>R Sound Object</strong>: As the first argument, designate the R sound object that you intend to save as a .wav file.</p></li>
+<li><p><strong>Sampling Frequency</strong> (<code>f</code>): Next, specify the sampling frequency.</p></li>
+<li><p><strong>Filename</strong> (<code>filename</code>): Finally, provide the desired filename under which the edited sound object will be stored.</p></li>
+</ol>
+<p>It’s worth noting that if the sampling frequency is not explicitly defined, the seewave package will automatically utilize the same sampling frequency as the edited R object, simplifying the saving process.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">savewav</span>(wake_all, <span class="at">filename =</span> <span class="st">"wakewords_combined.wav"</span>)      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Discussion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Emotional States:</strong> Based on the F0 contour and spectrogram, what acoustic shifts indicate the speaker’s emotional state change across wakewords?</li>
+<li><strong>Reflection:</strong> How could this physiological shift be used to automatically detect user frustration in call centers or smart home systems?</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="capstone-checkpoint-day-1" class="level2">
+<h2 class="anchored" data-anchor-id="capstone-checkpoint-day-1">Capstone Checkpoint Day 1</h2>
+<p>Now let’s start to converge toward your own voice project and use the following canvas:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Prompt</th>
+<th>Your answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Research question</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Why voice?</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Voice role</td>
+<td>Independent variable, dependent variable, mediator, moderator, etc.</td>
+</tr>
+<tr class="even">
+<td>Likely recording context</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>First feature candidate</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Rival explanation</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Ethical concerns</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="day-2-data-collection-preprocessing" class="level1">
+<h1>Day 2: Data Collection &amp; Preprocessing</h1>
+<section id="learning-goals-1" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals-1">Learning goals</h2>
+<p>By the end of Day 2, participants can:</p>
+<ul>
+<li>design a recording protocol that supports measurement validity;</li>
+<li>document device, setting, consent, and metadata decisions;</li>
+<li>preprocess audio without overwriting raw files;</li>
+<li>create a reproducible folder structure for voice data.</li>
+</ul>
+</section>
+<section id="recording-protocol" class="level2">
+<h2 class="anchored" data-anchor-id="recording-protocol">Recording protocol</h2>
+<p>Voice data quality is shaped before your analysis starts:</p>
+<ul>
+<li>microphone type and placement;</li>
+<li>room acoustics and background noise;</li>
+<li>file format, codec, sampling rate, and channel;</li>
+<li>task instructions and response length;</li>
+<li>participant language, accent, fatigue, privacy, and social context;</li>
+<li>whether the task is scripted, semi-structured, or naturalistic.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="micComparison_figureGuidelines.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Summary of Recoding Guidelines; see Busquet, Efthymiou, Hildebrand 2023</figcaption><p></p>
+</figure>
+</div>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body" title="Voice is biometric data">
+<p>Recordings can identify a person. Always obtain informed consent that names voice capture, storage and analysis; under GDPR speech is <em>special-category</em> data. De-identify, restrict access, and pre-specify retention/deletion.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="notes-on-recommended-folder-structure-in-projects" class="level2">
+<h2 class="anchored" data-anchor-id="notes-on-recommended-folder-structure-in-projects">Notes on Recommended Folder Structure in Projects</h2>
+<pre class="text"><code>data/
+  raw/              # untouched audio
+  processed/        # trimmed, converted, normalized audio
+  metadata/         # participant, device, trial, consent
+outputs/
+  features/         # acoustic and linguistic feature tables
+  transcripts/      # ASR output and quality flags
+  logs/             # prompts, model responses, errors
+reports/            # QMD, HTML, figures, summaries, etc.</code></pre>
+</section>
+<section id="preprocessing-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="preprocessing-pipeline">Preprocessing Pipeline</h2>
+<p>Preprocessing transforms noisy, raw audio into clean signals suitable for feature extraction. We will look at trimming silence, Voice Activity Detection (VAD), and unvoiced frame filtering using <code>noSilence()</code> and <code>zapsilw()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove leading/trailing silence</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cmd1_clean <span class="ot">&lt;-</span> <span class="fu">noSilence</span>(cmd1)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove all unvoiced frames (gaps between speech) using an amplitude threshold of 1%</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>cmd1_nosil <span class="ot">&lt;-</span> <span class="fu">zapsilw</span>(cmd1, <span class="at">threshold=</span><span class="dv">1</span>, <span class="at">plot=</span><span class="cn">FALSE</span>, <span class="at">output=</span><span class="st">"Wave"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare durations</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>seewave<span class="sc">::</span><span class="fu">duration</span>(cmd1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.314082</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>seewave<span class="sc">::</span><span class="fu">duration</span>(cmd1_nosil)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.415533</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot oscillograms comparing the two commands</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(cmd1, <span class="at">colwave=</span><span class="st">"black"</span>, <span class="at">title =</span> <span class="st">"Original"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(cmd1_clean, <span class="at">colwave=</span><span class="st">"blue"</span>, <span class="at">title =</span> <span class="st">"No Silence"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(cmd1_nosil, <span class="at">colwave=</span><span class="st">"green"</span>, <span class="at">title =</span> <span class="st">"Remove Unvoiced Frames"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/visualize-edited-files-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<hr>
+</section>
+<section id="application-1" class="level2">
+<h2 class="anchored" data-anchor-id="application-1">Application 1</h2>
+<p>Now, let’s write a loop that reads all the WAV files in the microphone test directory <code>voiceData/8_micTests/</code>, removes leading/trailing silences, normalizes the amplitude, and plots the cleaned waveforms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to mic tests</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mic_dir <span class="ot">&lt;-</span> <span class="st">"voiceData/8_micTests/"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mic_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(mic_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Process first 3 files as a demonstration</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">min</span>(<span class="dv">4</span>, <span class="fu">length</span>(mic_files))) {</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  file_path <span class="ot">=</span> <span class="fu">file.path</span>(mic_dir, mic_files[i])</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  wav_obj <span class="ot">&lt;-</span> <span class="fu">readWave</span>(file_path)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Clean leading/trailing silence</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  cleaned_wav <span class="ot">&lt;-</span> <span class="fu">noSilence</span>(wav_obj)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">oscillo</span>(cleaned_wav, <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Cleaned:"</span>, mic_files[i]))</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>This took quite a lot of time to display this graphic, you may set 'fastdisp=TRUE' for a faster, but less accurate, display</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="application-2" class="level2">
+<h2 class="anchored" data-anchor-id="application-2">Application 2</h2>
+<p>Now, let’s move to the <strong>“I go to the bar”</strong> corpus where each speaker said the same sentence once <strong>happy</strong> and once <strong>sad</strong> (a paired design that controls for speaker).</p>
+<section id="batch-read-and-parse-metadata-from-filenames" class="level3">
+<h3 class="anchored" data-anchor-id="batch-read-and-parse-metadata-from-filenames">Batch-read and parse metadata from filenames</h3>
+<p>Filenames follow <code>ID_Emotion_Bar.wav</code>. The chunk below uses <strong>base R</strong>, to demonstrate the parsing logic and building toward a processed dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"spk01_Happy_Bar.wav"</span>, <span class="st">"spk01_Sad_Bar.wav"</span>,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">"spk02_Happy_Bar.wav"</span>, <span class="st">"spk02_Sad_Bar.wav"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>audioDat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">file =</span> files, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>audioDat<span class="sc">$</span>user_id <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^(.+)_(Happy|Sad)_Bar</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, audioDat<span class="sc">$</span>file)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>audioDat<span class="sc">$</span>emotion <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^.+_(Happy|Sad)_Bar</span><span class="sc">\\</span><span class="st">.wav$"</span>,  <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, audioDat<span class="sc">$</span>file)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>audioDat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 file user_id emotion
+1 spk01_Happy_Bar.wav   spk01   Happy
+2   spk01_Sad_Bar.wav   spk01     Sad
+3 spk02_Happy_Bar.wav   spk02   Happy
+4   spk02_Sad_Bar.wav   spk02     Sad</code></pre>
+</div>
+</div>
+<p>In your own project, you would list the directory first and then apply the above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>emo_dir <span class="ot">&lt;-</span> <span class="st">"voiceData/7_BRM_paper_data/"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>emo_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>audioDat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">file =</span> emo_files, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>audioDat<span class="sc">$</span>user_id <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^(.+)_(Happy|Sad)_Bar</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, audioDat<span class="sc">$</span>file)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>audioDat<span class="sc">$</span>emotion <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^.+_(Happy|Sad)_Bar</span><span class="sc">\\</span><span class="st">.wav$"</span>,  <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, audioDat<span class="sc">$</span>file)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>audioDat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                             file
+1  5a2900b06a18b8f180655a8081e8b081_Happy_Bar.wav
+2    5a2900b06a18b8f180655a8081e8b081_Sad_Bar.wav
+3  5b438f516066ad470d3be72c52005251_Happy_Bar.wav
+4    5b438f516066ad470d3be72c52005251_Sad_Bar.wav
+5  7b7359b711c481311825da58bce2fd5c_Happy_Bar.wav
+6    7b7359b711c481311825da58bce2fd5c_Sad_Bar.wav
+7  7cbd0ab865aa3b0b913c104b0f914dc1_Happy_Bar.wav
+8    7cbd0ab865aa3b0b913c104b0f914dc1_Sad_Bar.wav
+9  ab129d98f2aeb19314d46db146460fd1_Happy_Bar.wav
+10   ab129d98f2aeb19314d46db146460fd1_Sad_Bar.wav
+11 b56bf78533b6a49f6a1f4c9005ca8aac_Happy_Bar.wav
+12   b56bf78533b6a49f6a1f4c9005ca8aac_Sad_Bar.wav
+13 caad094ef5e48a5de6a8340d7a3ebe1e_Happy_Bar.wav
+14   caad094ef5e48a5de6a8340d7a3ebe1e_Sad_Bar.wav
+15 cb10480757803ecfccd25c30056baa61_Happy_Bar.wav
+16   cb10480757803ecfccd25c30056baa61_Sad_Bar.wav
+17 d074376d2783eeb959f2f6c02091264c_Happy_Bar.wav
+18   d074376d2783eeb959f2f6c02091264c_Sad_Bar.wav
+19 f5f609e4eea5da77f3295ac4da20e023_Happy_Bar.wav
+20   f5f609e4eea5da77f3295ac4da20e023_Sad_Bar.wav
+                            user_id emotion
+1  5a2900b06a18b8f180655a8081e8b081   Happy
+2  5a2900b06a18b8f180655a8081e8b081     Sad
+3  5b438f516066ad470d3be72c52005251   Happy
+4  5b438f516066ad470d3be72c52005251     Sad
+5  7b7359b711c481311825da58bce2fd5c   Happy
+6  7b7359b711c481311825da58bce2fd5c     Sad
+7  7cbd0ab865aa3b0b913c104b0f914dc1   Happy
+8  7cbd0ab865aa3b0b913c104b0f914dc1     Sad
+9  ab129d98f2aeb19314d46db146460fd1   Happy
+10 ab129d98f2aeb19314d46db146460fd1     Sad
+11 b56bf78533b6a49f6a1f4c9005ca8aac   Happy
+12 b56bf78533b6a49f6a1f4c9005ca8aac     Sad
+13 caad094ef5e48a5de6a8340d7a3ebe1e   Happy
+14 caad094ef5e48a5de6a8340d7a3ebe1e     Sad
+15 cb10480757803ecfccd25c30056baa61   Happy
+16 cb10480757803ecfccd25c30056baa61     Sad
+17 d074376d2783eeb959f2f6c02091264c   Happy
+18 d074376d2783eeb959f2f6c02091264c     Sad
+19 f5f609e4eea5da77f3295ac4da20e023   Happy
+20 f5f609e4eea5da77f3295ac4da20e023     Sad</code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Discussion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Why is amplitude normalization crucial when comparing recordings from different participants? What errors could arise during the feature extraction phase (e.g.&nbsp;loudness/sone) if normalization is skipped?</p>
+</div>
+</div>
+</section>
+</section>
+<section id="capstone-checkpoint-day-2" class="level2">
+<h2 class="anchored" data-anchor-id="capstone-checkpoint-day-2">Capstone Checkpoint Day 2</h2>
+<p>Draft a data collection plan:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Design item</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Speaker sample</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Recording task</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Device and setting</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Consent details</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Raw/processed storage</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Exclusion rules</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Open science sharing plan</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="day-3-feature-extraction-construct-building" class="level1">
+<h1>Day 3: Feature Extraction &amp; Construct Building</h1>
+<section id="learning-goals-2" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals-2">Learning goals</h2>
+<p>By the end of Day 3, participants can:</p>
+<ul>
+<li>extract acoustic features manually using <code>soundgen</code> and in batches with <code>voiceR</code>;</li>
+<li>distinguish feature families across time, amplitude, frequency, and spectral domains;</li>
+<li>model paired happy/sad recordings;</li>
+<li>discuss construct validity issues &amp; context effects.</li>
+</ul>
+</section>
+<section id="feature-families" class="level2">
+<h2 class="anchored" data-anchor-id="feature-families">Feature families</h2>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Family</th>
+<th>Examples</th>
+<th>Behavioral interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Time</td>
+<td>duration, pauses, speech rate, voiced proportion</td>
+<td>fluency, hesitation, planning, turn-taking</td>
+</tr>
+<tr class="even">
+<td>Amplitude</td>
+<td>RMS, intensity, loudness, energy</td>
+<td>effort, arousal, emphasis, distance</td>
+</tr>
+<tr class="odd">
+<td>Frequency</td>
+<td>f0 mean, f0 range, f0 variability</td>
+<td>arousal, intonation, uncertainty, gender</td>
+</tr>
+<tr class="even">
+<td>Spectral / quality</td>
+<td>HNR, entropy, jitter, shimmer, formants</td>
+<td>voice quality, perturbation, breathiness, health indicator</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="feature-extraction-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="feature-extraction-in-r">Feature Extraction in R</h2>
+<p>We can extract features manually with <code>soundgen::analyze()</code> or perform automated batch extraction using <code>voiceR::autoExtract()</code>.</p>
+<section id="feature-extraction-via-soundgen" class="level3">
+<h3 class="anchored" data-anchor-id="feature-extraction-via-soundgen">Feature Extraction via <code>soundgen</code></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract features from a single wav file</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>feat_single <span class="ot">&lt;-</span> <span class="fu">analyze</span>(<span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect summary features</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(feat_single<span class="sc">$</span>summary[, <span class="fu">c</span>(<span class="st">"duration"</span>,<span class="st">"pitch_mean"</span>,<span class="st">"pitch_sd"</span>,<span class="st">"loudness_mean"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  duration pitch_mean pitch_sd loudness_mean
+1 2.314082   236.7432 66.66292      10.89368</code></pre>
+</div>
+</div>
+</section>
+<section id="batch-extraction-via-voicer" class="level3">
+<h3 class="anchored" data-anchor-id="batch-extraction-via-voicer">Batch Extraction via <code>voiceR</code></h3>
+<p>We will load recordings of speakers saying “I go to the bar” from the <code>7_BRM_paper_data</code> folder and extract vocal features.</p>
+<p>The <code>autoExtract()</code> function is the powerhouse of the voiceR package:</p>
+<ul>
+<li><p><em>Comprehensive Input</em>: It takes our list of wave objects (wav_list) as input</p></li>
+<li><p><em>File Format Specification</em>: fileType=“wav” indicates we’re working with WAV audio files</p></li>
+<li><p><em>Pattern Recognition</em>: fileNamePattern = “ID_Condition” tells voiceR that our filenames follow a pattern where:</p>
+<ul>
+<li>The first part is an identifier (speaker ID)</li>
+<li>The second part is a condition (Happy or Sad)</li>
+</ul></li>
+<li><p><em>Separator Definition</em>: <code>sep = "_"</code> specifies the underscore as the delimiter between filename components</p></li>
+<li><p><em>Parallel Processing</em>: <code>parallel = TRUE</code> enables multithreading for faster processing of multiple files</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List wav files in the paper data folder</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>emo_dir <span class="ot">&lt;-</span> <span class="st">"voiceData/7_BRM_paper_data/"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>emo_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read wave files into a list</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>wav_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(emo_files)) {</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> emo_files[i]</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  wav_obj <span class="ot">&lt;-</span> <span class="fu">readWave</span>(<span class="fu">file.path</span>(emo_dir, file_name))</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use filename as name</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  name_key <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="st">""</span>, file_name)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  wav_list[[name_key]] <span class="ot">&lt;-</span> wav_obj</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autoExtract in voiceR</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co"># (fileNamePattern defines the metadata components in the filename e.g. ID_Condition_null)</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>voiceR_feats <span class="ot">&lt;-</span> <span class="fu">autoExtract</span>(</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">audioList =</span> wav_list, </span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileType =</span> <span class="st">"wav"</span>, </span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileNamePattern =</span> <span class="st">"ID_Condition"</span>, </span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">"_"</span>, </span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="cn">TRUE</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structured feature dataset</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(voiceR_feats[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  duration voice_breaks_percent    RMS_env mean_loudness   mean_F0     sd_F0
+1 1.000454           0.41025641 0.33717440     13.198637 132.66760 15.888255
+2 0.973356           0.24324324 0.09030643      5.248221  89.15728  9.599553
+3 1.161882           0.28888889 0.17305893      9.211309 260.01141 50.122066
+4 1.174762           0.02173913 0.17109355      9.333324 220.00266 50.670449
+5 1.076145           0.50000000 0.19271910      9.502658 179.89215 87.176346
+6 1.129070           0.18181818 0.05780810      3.457799 116.18305  5.918873
+  mean_entropy  mean_HNR
+1   0.05310476  7.370900
+2   0.07857337  8.452562
+3   0.10605244  9.192272
+4   0.10502572 11.411364
+5   0.06882506  7.265751
+6   0.13605099 10.236111</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autoReport to generate a report get a full summary</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#autoReport(voiceR_feats)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="exercises-1" class="level2">
+<h2 class="anchored" data-anchor-id="exercises-1">Exercises</h2>
+<section id="modeling-speaker-emotion" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-speaker-emotion">Modeling Speaker Emotion</h3>
+<p>Using the <code>voiceR_feats</code> data frame extracted above: - Inspect the <code>Condition</code> column (automatically parsed from the filenames by <code>autoExtract()</code>). - Perform a t-test to check if average pitch (<code>mean_F0</code>) differs significantly between happy and sad speech. - Fit a logistic regression model in R to predict speaker emotion (<code>Condition</code>) from your acoustic features (e.g., <code>mean_F0</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Inspect the automatically extracted Condition column</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(voiceR_feats<span class="sc">$</span>Condition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Happy   Sad 
+   10    10 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. t-test for pitch (F0 mean)</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mean_F0 <span class="sc">~</span> Condition, <span class="at">data =</span> voiceR_feats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  mean_F0 by Condition
+t = 2.7492, df = 15.645, p-value = 0.01448
+alternative hypothesis: true difference in means between group Happy and group Sad is not equal to 0
+95 percent confidence interval:
+  14.87125 115.87816
+sample estimates:
+mean in group Happy   mean in group Sad 
+           213.9390            148.5643 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit predictive model</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">as.factor</span>(Condition) <span class="sc">~</span> mean_F0 <span class="sc">+</span> mean_loudness <span class="sc">+</span> duration , <span class="at">data =</span> voiceR_feats, <span class="at">family =</span> binomial)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = as.factor(Condition) ~ mean_F0 + mean_loudness + 
+    duration, family = binomial, data = voiceR_feats)
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)  
+(Intercept)    9.40878    8.00305   1.176   0.2397  
+mean_F0       -0.04195    0.02561  -1.638   0.1015  
+mean_loudness -0.63253    0.31778  -1.990   0.0465 *
+duration       3.23538    5.50217   0.588   0.5565  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 27.726  on 19  degrees of freedom
+Residual deviance: 13.388  on 16  degrees of freedom
+AIC: 21.388
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Discussion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Look at the logistic regression output. Which acoustic features are the strongest predictors of emotional valence? Do the results match the physiological theories of vocal expressions we discussed?</p>
+</div>
+</div>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body" title="Mind Validity Issue">
+<p>ASR and acoustic models can underperform for some accents, ages and genders. Recall the <strong>sociophonetics</strong> lesson: vocal variation is socially structured, so subgroup checks are an important part of validity assessment (can your extracted features capture what you want them to measure?).</p>
+</div>
+</div>
+</section>
+</section>
+<section id="capstone-checkpoint-3" class="level2">
+<h2 class="anchored" data-anchor-id="capstone-checkpoint-3">Capstone Checkpoint 3</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Your project</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Construct</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Mechanism</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Expected vocal cue</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Acoustic/linguistic feature</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Aggregation level</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Rival explanation(s)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Validation evidence</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="day-4-speech-to-text" class="level1">
+<h1>Day 4: Speech-to-Text</h1>
+<section id="learning-goals-3" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals-3">Learning goals</h2>
+<p>By the end of Day 4, participants can:</p>
+<ul>
+<li>transcribe audio with a speech-to-text API;</li>
+<li>evaluate transcription quality and potential bias</li>
+</ul>
+</section>
+<section id="speech-to-text-and-asr-systems" class="level2">
+<h2 class="anchored" data-anchor-id="speech-to-text-and-asr-systems">Speech-to-Text and ASR Systems</h2>
+<p>Converting speech to text (Automatic Speech Recognition or ASR) allows us to capture both <em>what</em> is said (verbal content) and <em>how</em> it is said (paralinguistics). Modern ASR systems utilize deep learning neural architectures like OpenAI’s Whisper.</p>
+<section id="transcription-via-openais-whisper-api-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="transcription-via-openais-whisper-api-in-r">Transcription via OpenAI’s Whisper API in R</h3>
+<p>We use the <code>openai</code> package to call the API (make sure to add your own API key as discussed in class).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openai)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set API key</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">OPENAI_API_KEY =</span> <span class="st">"YOUR-API-KEY"</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transcribe command file</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>transcript <span class="ot">&lt;-</span> <span class="fu">create_transcription</span>(</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"whisper-1"</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print transcription</span></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Transcription:"</span>, transcript<span class="sc">$</span>text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="transcription-via-google-cloud-speech-to-text-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="transcription-via-google-cloud-speech-to-text-in-r">Transcription via Google Cloud Speech-to-Text in R</h3>
+<p>The <code>googleLanguageR</code> package offers direct bindings to Google Cloud’s Language APIs. If you already have an OpenAI account, I suggest plugging in your API key and go with the <code>openai</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googleLanguageR)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate using Google Cloud Service Account JSON</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">gl_auth</span>(<span class="st">"path_to_service_account_credentials.json"</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transcribe audio file</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>speech_result <span class="ot">&lt;-</span> <span class="fu">gl_speech</span>(</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>,</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampleRateHertz =</span> <span class="dv">16000</span>,</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">languageCode =</span> <span class="st">"en-US"</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>speech_result<span class="sc">$</span>transcript</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="advanced-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-extensions">Advanced Extensions</h2>
+<section id="audio-embeddings-with-talk" class="level3">
+<h3 class="anchored" data-anchor-id="audio-embeddings-with-talk">Audio Embeddings with <code>talk</code></h3>
+<p>Acoustic feature extraction measures specific dimensions. In contrast, <strong>voice embeddings</strong> represent the entire acoustic style and speaker profile in a high-dimensional vector. We can use the <code>talk</code> package to generate these embeddings, and then plug them into a linear PCA or non-linear t-SNE for dimension reduction. Note that the same logic applies as in other dimension reduction settings, i.e.&nbsp;we have to define ourselves what those dimensions and vectors mean.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(talk)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup talk R environment dependencies (run once on setup)</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># talkrpp_install()</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># talkrpp_initialize(save_profile = TRUE)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate embeddings for an audio file</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>wav_path <span class="ot">&lt;-</span> <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>emb <span class="ot">&lt;-</span> <span class="fu">talkEmbed</span>(wav_path)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co"># View dimensions</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(emb)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s revise our code to extract the embeddings for all files of the <code>I go to the bar</code>corpus.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(talk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[0;34mThis is talk. (version 0.30).
+[0m[0;32mNewer versions may have improved functions and updated defaults to reflect current understandings of the state-of-the-art.[0m[0;35m
+ MacOS detected: Setting OpenMP environment variables to avoid potential crash due to libomp conflicts. 
+[0m[0;35mThe topics package is provided 'as is' without any warranty of any kind. 
+[0m[0;32m
+
+For more information about the package see www.r-talk.org.[0m</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[0;34mtalkrpp python option is already set, talk will use: condaenv = "talkrpp_condaenv"[0m</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[0;32m
+Successfully initialized talk required python packages.
+[0m</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[0;34mPython options: 
+ type = "talkrpp_condaenv", 
+ name = "talkrpp_condaenv".[0m</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'foreach'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:purrr':
+
+    accumulate, when</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: iterators</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: parallel</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Define paths</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>emo_dir <span class="ot">&lt;-</span> <span class="st">"voiceData/7_BRM_paper_data/"</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Absolute path fallback:</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co"># emo_dir &lt;- "/Users/childebrand/Dropbox/2_Teaching/2026_FS/1_GSERM_ESADE/voiceData/7_BRM_paper_data/"</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>emo_files_paths <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>emo_files_names <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">full.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Setup the parallel cluster (outfile = "" redirects stdout/stderr)</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>num_cores <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="dv">9</span>, parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(num_cores, <span class="at">outfile =</span> <span class="st">""</span>) </span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Spawning parallel cluster with"</span>, num_cores, <span class="st">"cores. Please wait...</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Spawning parallel cluster with 9 cores. Please wait...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Run the extraction in parallel (we removed the .packages argument)</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>embeddings_list <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">i =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(emo_files_paths), </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">.errorhandling =</span> <span class="st">"remove"</span>) <span class="sc">%dopar%</span> {</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Load packages silently inside each worker process ---</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(talk))</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(reticulate))</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> emo_files_paths[i]</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> emo_files_names[i]</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Suppress Python/HuggingFace warnings ---</span></span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">try</span>({</span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">py_run_string</span>(<span class="st">"</span></span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a><span class="st">import warnings</span></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a><span class="st">warnings.filterwarnings('ignore') # Ignore general Python warnings</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a><span class="st">import transformers</span></span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a><span class="st">transformers.logging.set_verbosity_error() # Suppress HuggingFace info/warnings</span></span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print the active file to the console in real-time</span></span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"[%d/%d] Analyzing: %s</span><span class="sc">\n</span><span class="st">"</span>, i, <span class="fu">length</span>(emo_files_paths), file_name))</span>
+<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-25"><a href="#cb55-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the embedding</span></span>
+<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>  emb <span class="ot">&lt;-</span> talk<span class="sc">::</span><span class="fu">talkEmbed</span>(file_path)</span>
+<span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-28"><a href="#cb55-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse speaker ID and emotion condition from the filename (e.g., "10_Happy_Bar")</span></span>
+<span id="cb55-29"><a href="#cb55-29" aria-hidden="true" tabindex="-1"></a>  name_clean <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="st">""</span>, file_name)</span>
+<span id="cb55-30"><a href="#cb55-30" aria-hidden="true" tabindex="-1"></a>  filename_components <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(name_clean, <span class="st">"_"</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb55-31"><a href="#cb55-31" aria-hidden="true" tabindex="-1"></a>  user_id <span class="ot">&lt;-</span> filename_components[<span class="dv">1</span>]</span>
+<span id="cb55-32"><a href="#cb55-32" aria-hidden="true" tabindex="-1"></a>  emotion <span class="ot">&lt;-</span> filename_components[<span class="dv">2</span>]</span>
+<span id="cb55-33"><a href="#cb55-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-34"><a href="#cb55-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the metadata columns data frame</span></span>
+<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a>  metadata_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb55-36"><a href="#cb55-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">file_name =</span> file_name,</span>
+<span id="cb55-37"><a href="#cb55-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">user_id =</span> user_id,</span>
+<span id="cb55-38"><a href="#cb55-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">emotion =</span> emotion,</span>
+<span id="cb55-39"><a href="#cb55-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb55-40"><a href="#cb55-40" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb55-41"><a href="#cb55-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-42"><a href="#cb55-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine metadata and embeddings (placing metadata at the FRONT/left-most side)</span></span>
+<span id="cb55-43"><a href="#cb55-43" aria-hidden="true" tabindex="-1"></a>  emb_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(metadata_df, <span class="fu">as.data.frame</span>(emb))</span>
+<span id="cb55-44"><a href="#cb55-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-45"><a href="#cb55-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(emb_df)</span>
+<span id="cb55-46"><a href="#cb55-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb55-47"><a href="#cb55-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-48"><a href="#cb55-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. CRITICAL: Stop cluster to free up memory</span></span>
+<span id="cb55-49"><a href="#cb55-49" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span>
+<span id="cb55-50"><a href="#cb55-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Extraction complete! Cluster closed.</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Extraction complete! Cluster closed.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Bind all rows</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>combined_embeddings <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(embeddings_list, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Verify that metadata columns are at the front</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(combined_embeddings[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                        file_name
+                                           &lt;char&gt;
+1: 5a2900b06a18b8f180655a8081e8b081_Happy_Bar.wav
+2:   5a2900b06a18b8f180655a8081e8b081_Sad_Bar.wav
+3: 5b438f516066ad470d3be72c52005251_Happy_Bar.wav
+4:   5b438f516066ad470d3be72c52005251_Sad_Bar.wav
+5: 7b7359b711c481311825da58bce2fd5c_Happy_Bar.wav
+6:   7b7359b711c481311825da58bce2fd5c_Sad_Bar.wav
+                            user_id emotion       Dim1        Dim2         Dim3
+                             &lt;char&gt;  &lt;char&gt;      &lt;num&gt;       &lt;num&gt;        &lt;num&gt;
+1: 5a2900b06a18b8f180655a8081e8b081   Happy 0.14053872 0.018566675 -0.017829239
+2: 5a2900b06a18b8f180655a8081e8b081     Sad 0.13277596 0.081188247 -0.075231209
+3: 5b438f516066ad470d3be72c52005251   Happy 0.09747053 0.029447019 -0.007648799
+4: 5b438f516066ad470d3be72c52005251     Sad 0.09549955 0.030348007 -0.008426422
+5: 7b7359b711c481311825da58bce2fd5c   Happy 0.05937411 0.062876627 -0.012312582
+6: 7b7359b711c481311825da58bce2fd5c     Sad 0.07420194 0.004419113  0.119329996
+        Dim4       Dim5
+       &lt;num&gt;      &lt;num&gt;
+1: 0.2812733 0.29985785
+2: 0.4023055 0.31202072
+3: 0.2711277 0.24499752
+4: 0.5844799 0.09051189
+5: 0.3020801 0.25542739
+6: 0.2275707 0.32511273</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>reshape_attempt <span class="ot">&lt;-</span> combined_embeddings <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">condition =</span> emotion)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Prepare numeric data for PCA (exclude metadata AND ungroup)</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>pca_input <span class="ot">&lt;-</span> reshape_attempt <span class="sc">|&gt;</span> <span class="co">#reshape_attempt</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Dim"</span>))</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run PCA</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>pca_output <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(pca_input, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create a data frame for visualization and stats</span></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(pca_output<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(reshape_attempt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition))</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Calculate variance explained</span></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>var_explained <span class="ot">&lt;-</span> pca_output<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_output<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>pc1_var <span class="ot">&lt;-</span> var_explained[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>pc2_var <span class="ot">&lt;-</span> var_explained[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Statistical Check: Does 'condition' explain the variance in PC1 or PC2?</span></span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>anova_pc1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">aov</span>(PC1 <span class="sc">~</span> condition, <span class="at">data =</span> pca_df))</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>anova_pc2 <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">aov</span>(PC2 <span class="sc">~</span> condition, <span class="at">data =</span> pca_df))</span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Print findings</span></span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"--- PCA Variance Explained ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--- PCA Variance Explained ---</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"PC1: %.2f%%</span><span class="sc">\n</span><span class="st">"</span>, pc1_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PC1: 31.15%</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"PC2: %.2f%%</span><span class="sc">\n\n</span><span class="st">"</span>, pc2_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PC2: 12.65%</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"--- ANOVA: Condition effect on PC1 ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--- ANOVA: Condition effect on PC1 ---</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_pc1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)  
+condition    1    985   985.5   4.983 0.0385 *
+Residuals   18   3560   197.8                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">--- ANOVA: Condition effect on PC2 ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+--- ANOVA: Condition effect on PC2 ---</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_pc2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
+condition    1      8    8.04   0.079  0.782
+Residuals   18   1837  102.07               </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Generate the plot</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"PCA of Voice Embeddings"</span>,</span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"PC1: "</span>, <span class="fu">round</span>(pc1_var, <span class="dv">1</span>), <span class="st">"% | PC2: "</span>, <span class="fu">round</span>(pc2_var, <span class="dv">1</span>), <span class="st">"% variance explained"</span>),</span>
+<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">paste0</span>(<span class="st">"PC1 ("</span>, <span class="fu">round</span>(pc1_var, <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
+<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">paste0</span>(<span class="st">"PC2 ("</span>, <span class="fu">round</span>(pc2_var, <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
+<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Condition"</span></span>
+<span id="cb73-11"><a href="#cb73-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb73-12"><a href="#cb73-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtsne)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prepare numeric matrix (removing grouping)</span></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>tsne_input <span class="ot">&lt;-</span> reshape_attempt <span class="sc">|&gt;</span> </span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Dim"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run t-SNE</span></span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: With only 20 observations, perplexity must be low (typically &lt; N/3).</span></span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll use perplexity = 5.</span></span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">777</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>tsne_out <span class="ot">&lt;-</span> <span class="fu">Rtsne</span>(tsne_input, </span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">perplexity =</span> <span class="dv">5</span>, </span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dims =</span> <span class="dv">2</span>, </span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">check_duplicates =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-19"><a href="#cb74-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create plotting dataframe</span></span>
+<span id="cb74-20"><a href="#cb74-20" aria-hidden="true" tabindex="-1"></a>tsne_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(tsne_out<span class="sc">$</span>Y) <span class="sc">|&gt;</span></span>
+<span id="cb74-21"><a href="#cb74-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">tsne1 =</span> V1, <span class="at">tsne2 =</span> V2) <span class="sc">|&gt;</span></span>
+<span id="cb74-22"><a href="#cb74-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(reshape_attempt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if
+`.name_repair` is omitted as of tibble 2.0.0.
+ℹ Using compatibility `.name_repair`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Visualize</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tsne_df, <span class="fu">aes</span>(<span class="at">x =</span> tsne1, <span class="at">y =</span> tsne2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"t-SNE of Voice Embeddings"</span>,</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Perplexity = 5 (adjusted for small N)"</span>,</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"t-SNE 1"</span>,</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"t-SNE 2"</span>,</span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Condition"</span></span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="voice-agents-stt---llm---tts" class="level3">
+<h3 class="anchored" data-anchor-id="voice-agents-stt---llm---tts">Voice Agents (STT -&gt; LLM -&gt; TTS)</h3>
+<p>A conversational AI voice agent links three components: <span class="math display">\[\text{Audio Input} \xrightarrow{\text{STT}} \text{Text Transcript} \xrightarrow{\text{LLM}} \text{Text Response} \xrightarrow{\text{TTS}} \text{Audio Output}\]</span> The field has shifted very rapidly and I generally recommend using any of the tools below. The marginal utility to take an existing huggingface implementation is declining sharply as you have full flexibility with any of the following tools. When developing sophisticated conversational agents like the one shown below, I recommend simply using tools like <strong>Claude Code</strong>, <strong>OpenAI Codex</strong>, <strong>Google Antigravity</strong>, or <strong>Google’s AI Studio</strong> to accelerate your prototyping and implementation. I will demonstrate a simple implementation in class and outline areas that require careful attention when you use such tools for “vibe coding” (e.g., data storage, privacy, etc.)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Demo_AgentGemini.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Example of an AI Agent Interface</figcaption><p></p>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="day-5-evaluation-your-capstone-projects" class="level1">
+<h1>Day 5: Evaluation &amp; Your Capstone Projects</h1>
+<section id="learning-goals-4" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals-4">Learning goals</h2>
+<p>By the end of Day 5, participants can:</p>
+<ul>
+<li>evaluate voice analytics claims across signal, feature, model, system, and human levels;</li>
+<li>position voice measures in experimental designs;</li>
+<li>present their capstone project idea and receive actionable feedback;</li>
+<li>refine and finalize their capstone report.</li>
+</ul>
+</section>
+<section id="voice-in-experimental-designs" class="level2">
+<h2 class="anchored" data-anchor-id="voice-in-experimental-designs">Voice in experimental designs</h2>
+<p>How do you intend to study voice in your project?</p>
+<ul>
+<li><strong>dependent variable:</strong> how a participant sounds after a manipulation;</li>
+<li><strong>independent variable:</strong> agent voice style, accent, speed, warmth, or confidence;</li>
+<li><strong>mediator:</strong> voice features explain treatment effects on downstream behavior;</li>
+<li><strong>moderator:</strong> speaker or agent voice changes treatment effectiveness;</li>
+<li><strong>manipulation check:</strong> acoustic/linguistic evidence that the intended voice style occurred;</li>
+<li><strong>data collection interface:</strong> the agent conducts an interview or task.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Design check
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For your capstone, label the role of voice in the causal design. If there is no causal design, label the prediction or measurement design.</p>
+</div>
+</div>
+</section>
+<section id="a-simple-evaluation-framework" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-evaluation-framework">A simple evaluation framework:</h2>
+<ol type="1">
+<li><strong>Signal:</strong> Is the audio usable and comparable?</li>
+<li><strong>Measure:</strong> Are features reliable and theoretically linked?</li>
+<li><strong>Model:</strong> Does the model generalize, calibrate, and avoid leakage?</li>
+<li><strong>System:</strong> Does the agent work robustly, safely, and with acceptable latency (if you happen to use agents for data collection)?</li>
+<li><strong>Human:</strong> Does the study respect participant privacy with clear consent?</li>
+</ol>
+<hr>
+</section>
+<section id="capstone-report-outline" class="level2">
+<h2 class="anchored" data-anchor-id="capstone-report-outline">Capstone Report Outline</h2>
+<ol type="1">
+<li><strong>Research question and theory:</strong> why voice analytics or a voice agent is needed.</li>
+<li><strong>Design:</strong> participants, recording/agent context, procedure, and consent.</li>
+<li><strong>Measurement pipeline:</strong> preprocessing, features, transcripts, embeddings, or logs.</li>
+<li><strong>Analysis/evaluation:</strong> model, validation, robustness, and fairness checks.</li>
+<li><strong>Contribution and limitations:</strong> what the voice component adds and what remains uncertain.</li>
+</ol>
+</section>
+<section id="course-summary-key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="course-summary-key-takeaways">Course Summary &amp; Key Takeaways</h2>
+<ol type="1">
+<li>Voice is a rich behavioral data layer — the <em>how</em>, not just the <em>what</em>.</li>
+<li>A principled pipeline (collect → preprocess → extract → model → evaluate) makes it tractable and reproducible.</li>
+<li>Theory-driven feature mapping beats kitchen-sink extraction.</li>
+<li>Conversational agents turn voice from a data source into a research instrument.</li>
+<li>Validity, fairness and open, ethical practice are part of the method.</li>
+</ol>
+</section>
+<section id="further-resources" class="level2">
+<h2 class="anchored" data-anchor-id="further-resources">Further Resources</h2>
+<ul>
+<li>Hildebrand, Efthymiou,Busquet, Hampton, Hoffman &amp; Novak (2020), <a href="https://doi.org/10.1016/j.jbusres.2020.09.020"><em>Voice analytics in business research: Conceptual foundations, acoustic feature extraction, and applications</em></a>, Journal of Business Research.</li>
+<li>Busquet, Efthymiou &amp; Hildebrand (2023), <a href="https://doi.org/10.3758/s13428-023-02139-9"><em>Voice analytics in the wild: Validity and predictive accuracy of common audio-recording devices</em></a>, Behavior Research Methods.</li>
+<li>Busquet &amp; Hildebrand (2023), <a href="https://cran.r-project.org/package=voiceR"><strong>voiceR</strong> package</a> (CRAN).</li>
+<li>Jurafsky &amp; Martin, <a href="https://web.stanford.edu/~jurafsky/slp3/"><em>Speech and Language Processing</em></a> (3rd ed.).</li>
+<li>Main Packages: <code>seewave</code>, <code>tuneR</code>, <code>soundgen</code>, <code>phonTools</code>, <code>voiceR</code>, <code>openai</code>, <code>reticulate</code>, <code>googleLanguageR</code>, <code>text</code>, <code>talk</code>.</li>
+</ul>
+<hr>
+</section>
+<section id="session-info" class="level2">
+<h2 class="anchored" data-anchor-id="session-info">Session info</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.6.0 (2026-04-24)
+Platform: aarch64-apple-darwin23
+Running under: macOS Sequoia 15.1.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Vienna
+tzcode source: internal
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] Rtsne_0.17              doParallel_1.0.17       iterators_1.0.14       
+ [4] foreach_1.5.2           talk_0.30               text_1.9               
+ [7] reticulate_1.46.0       pROC_1.19.0.1           caret_7.0-1            
+[10] lattice_0.22-9          data.table_1.18.4       lubridate_1.9.5        
+[13] forcats_1.0.1           stringr_1.6.0           dplyr_1.2.1            
+[16] purrr_1.2.2             readr_2.2.0             tidyr_1.3.2            
+[19] tibble_3.3.1            ggplot2_4.0.3           tidyverse_2.0.0        
+[22] googleLanguageR_0.3.1.1 openai_0.4.1            voiceR_0.1.0           
+[25] phonTools_0.2-2.2       soundgen_2.9.0          seewave_2.2.4          
+[28] tuneR_1.4.7            
+
+loaded via a namespace (and not attached):
+  [1] splines_4.6.0        later_1.4.8          cellranger_1.1.0    
+  [4] polyclip_1.10-7      hardhat_1.4.3        rpart_4.1.27        
+  [7] lifecycle_1.0.5      rstatix_0.7.3        globals_0.19.1      
+ [10] MASS_7.3-65          backports_1.5.1      magrittr_2.0.5      
+ [13] plotly_4.12.0        sass_0.4.10          rmarkdown_2.31      
+ [16] jquerylib_0.1.4      yaml_2.3.12          httpuv_1.6.17       
+ [19] otel_0.2.0           gld_2.6.8            cowplot_1.2.0       
+ [22] RColorBrewer_1.1-3   multcomp_1.4-30      abind_1.4-8         
+ [25] expm_1.0-0           nnet_7.3-20          TH.data_1.1-5       
+ [28] tweenr_2.0.3         sandwich_3.1-1       ipred_0.9-15        
+ [31] lava_1.9.1           listenv_0.10.1       nortest_1.0-4       
+ [34] parallelly_1.47.0    ggwordcloud_0.6.2    svglite_2.2.2       
+ [37] codetools_0.2-20     coin_1.4-3           DT_0.34.0           
+ [40] xml2_1.5.2           ggforce_0.5.0        tidyselect_1.2.1    
+ [43] farver_2.1.2         matrixStats_1.5.0    stats4_4.6.0        
+ [46] base64enc_0.1-6      jsonlite_2.0.0       e1071_1.7-17        
+ [49] Formula_1.2-5        survival_3.8-6       systemfonts_1.3.2   
+ [52] signal_1.8-1         tools_4.6.0          DescTools_0.99.60   
+ [55] Rcpp_1.1.1-1.1       glue_1.8.1           prodlim_2026.03.11  
+ [58] gridExtra_2.3        xfun_0.58            RcppProgress_0.4.2  
+ [61] ggthemes_5.2.0       withr_3.0.2          fastmap_1.2.0       
+ [64] boot_1.3-32          shinyjs_2.1.1        digest_0.6.39       
+ [67] timechange_0.4.0     R6_2.6.1             mime_0.13           
+ [70] colorspace_2.1-2     textshaping_1.0.5    textmineR_3.0.6     
+ [73] generics_0.1.4       recipes_1.3.3        class_7.3-23        
+ [76] stopwords_2.3        quanteda_4.4         httr_1.4.8          
+ [79] htmlwidgets_1.6.4    ModelMetrics_1.2.2.2 pkgconfig_2.0.3     
+ [82] gtable_0.3.6         Exact_3.3            dials_1.4.3         
+ [85] parsnip_1.6.0        timeDate_4052.112    modeltools_0.2-24   
+ [88] lmtest_0.9-40        S7_0.2.2             workflows_1.3.0     
+ [91] furrr_0.4.0          htmltools_0.5.9      carData_3.0-6       
+ [94] multcompView_0.1-11  scales_1.4.0         kableExtra_1.4.0    
+ [97] lmom_3.3             png_0.1-9            gower_1.0.2         
+[100] knitr_1.51           rstudioapi_0.18.0    tzdb_0.5.0          
+[103] reshape2_1.4.5       nlme_3.1-169         proxy_0.4-29        
+[106] cachem_1.1.0         zoo_1.8-15           rsample_1.3.2       
+[109] rootSolve_1.8.2.4    libcoin_1.0-13       pillar_1.11.1       
+[112] grid_4.6.0           vctrs_0.7.3          tune_2.1.0          
+[115] promises_1.5.0       ggpubr_0.6.3         car_3.1-5           
+[118] shinyFiles_0.9.3     xtable_1.8-8         yardstick_1.4.0     
+[121] evaluate_1.0.5       phia_0.3-2           mvtnorm_1.4-1       
+[124] cli_3.6.6            compiler_4.6.0       rlang_1.2.0         
+[127] future.apply_1.20.2  ggsignif_0.6.4       labeling_0.4.3      
+[130] plyr_1.8.9           fs_2.1.0             stringi_1.8.7       
+[133] topics_1.0           viridisLite_0.4.3    assertthat_0.2.1    
+[136] lazyeval_0.2.3       rcompanion_2.5.2     Matrix_1.7-5        
+[139] patchwork_1.3.2      hms_1.1.4            future_1.70.0       
+[142] shiny_1.13.0         haven_2.5.5          googleAuthR_2.0.2.1 
+[145] gridtext_0.1.6       gargle_1.6.1         FSA_0.10.1          
+[148] broom_1.0.13         memoise_2.0.1        bslib_0.11.0        
+[151] fastmatch_1.1-8      readxl_1.5.0         DiceDesign_1.10     </code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<script>videojs(video_shortcode_videojs_video1);</script>
+
+
+
+</body></html>

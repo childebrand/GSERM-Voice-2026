@@ -1,0 +1,923 @@
+---
+title: "Voice Analytics for Behavioral Scientists"
+subtitle: "From Acoustic Features to Conversational AI Agents (5-Day Workshop)"
+author: "Prof. Dr. Christian Hildebrand"
+format: 
+  html:
+    theme: flatly
+    code-background: true
+    code-copy: true
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+#### Course Instructor & Contact:
+**Prof. Dr. Christian Hildebrand** <br>
+Full Professor of Marketing Analytics <br>
+Executive Director, Institute of Behavioral Science & Technology (IBT-HSG) <br> 
+University of St. Gallen <br><br>
+Email: [christian.hildebrand@unisg.ch](mailto:christian.hildebrand@unisg.ch) <br>
+Web: [ibt.unisg.ch](https://ibt.unisg.ch) | Social: [LinkedIn Profile](https://www.linkedin.com/in/christian-hildebrand/)
+
+---
+
+# Welcome & Logistics
+
+Welcome to the 5-Day Voice Analytics Workshop at GSERM! This notebook serves as your interactive workspace for the entire course. We will cover the complete pipeline: from loading raw audio and extracting paralinguistic features to transcribing speech via LLMs and designing conversational AI agents.
+
+Let's start by verifying that your R environment is properly set up and loading all the necessary packages.
+
+# Software Setup
+
+We work primarily in **R / RStudio** with **Quarto** for reproducible reporting, and
+reach into **Python** only through **`reticulate`** so that non-Python users never
+have to leave R.
+
+## Install everything once
+
+```{r install, eval=FALSE}
+# --- Core audio & analysis -------------------------------------------------
+install.packages(c(
+  "tuneR", "seewave", "soundgen", "phonTools",  # acoustics
+  "voiceR",                                       # batch extraction + reports
+  "tidyverse", "data.table",                      # data wrangling
+  "caret", "pROC"                                 # modelling / validation
+))
+
+# --- Speech-to-text, language & embeddings ---------------------------------
+install.packages(c(
+  "openai",          # Whisper STT + LLM + TTS via the OpenAI API
+  "reticulate",      # call Python from R (local Whisper, transformers)
+  "googleLanguageR", # Google Cloud Speech-to-Text & Natural Language
+  "text"             # transformer text embeddings (Hugging Face)
+))
+# 'talk' (sibling of 'text') turns recordings into text, audio features, or
+# embeddings; install from its repository when needed.
+```
+
+## Loading all packages to the current session
+
+::: {.callout-note}
+## Verify your setup
+Run `library(tuneR); library(seewave); library(soundgen)` with no errors. If that works, let's load all packages.
+:::
+
+```{r setup, message=FALSE, warning=FALSE}
+# Acoustics & audio
+library(tuneR)
+library(seewave)
+library(soundgen)
+library(phonTools)
+
+# Batch feature extraction & reporting
+library(voiceR)
+
+# Speech-to-Text
+library(openai)
+library(googleLanguageR)
+
+# Data wrangling & analyses
+library(tidyverse)
+library(data.table)
+library(caret)
+library(pROC)
+library(reticulate)
+library(text)
+```
+
+
+
+
+---
+
+# Day 1: Foundations & Audio Workflows
+
+## Learning goals
+
+By the end of Day 1, participants can:
+
+- explain why voice is a behavioral data layer rather than merely an input channel;
+- distinguish acoustic observations from psychological constructs;
+- read, inspect, listen to, edit, and save WAV files in R;
+- produce oscillograms, pitch tracks, formant plots, and spectrograms;
+- develop your capstone idea we work toward in this course.
+
+## Why voice data matters
+
+Voice can reveal information that surveys, click data, and raw text often miss:
+
+- affective arousal in real time;
+- hesitation, uncertainty, and cognitive load;
+- prosodic stance, dominance, and confidence;
+- interaction breakdowns and repair;
+- social and linguistic context;
+- human responses to AI agents.
+
+## Theoretical Foundations 
+
+Clicks, search terms, and retrospective surveys capture conscious decisions, but they often fail to capture real-time emotional fluctuations, cognitive load, or authentic visceral reactions. Paralinguistic features (how something is said, independent of the semantic text) provide a direct, physiological window into the speaker's emotional state, stress levels, confidence, and personality. In what follows, I provide a very brief overview of the main fields and theoretical foundations.
+
+### Linguistics
+
+Linguistics studies the structure and use of language. For this course, the most useful parts are:
+
+- **Phonetics:** how speech sounds are produced, transmitted, and perceived.
+- **Phonology:** how sound categories work in a language.
+- **Semantics:** how words and sentences carry meaning.
+- **Pragmatics and discourse:** how meaning depends on context, interaction, turn-taking, repair, politeness, stance, and intention.
+
+The key lesson here is that speech is not just text with some additional auditory noise but that speech signals in itself carry meaning and provide us with a lens into people's behavior.
+
+### Sociolinguistics
+
+Sociolinguistics studies how language varies across social context, community, identity, power, and setting. It helps behavioral researchers remember that "variation" is not only measurement error. Accent, register, politeness, code-switching, and style shifting can be central to the phenomenon.
+
+### Sociophonetics
+
+Sociophonetics connects fine-grained phonetic detail with social meaning. It asks how pitch, vowels, timing, voice quality, accent, and style index identity, stance, group membership, or social context. This matters for voice analytics because the same acoustic cue can reflect emotion, identity performance, health, recording setup, or interaction design. An important insight from sociophonetics is, for example, that various social categories like your socio-economic status, power within a group, ethnicity, etc. are all encoded in the way how you speak and not just what you say.
+
+## Speech Production & Anatomy
+Beyond these foundational fields, it's also important to realize that speech is also deeply connected to our physiology. Taller people typically have a lower pitch due to their larger larynx and vocal cords. Speech is broadly speaking produced by a three-step physical system:
+- **Respiration (Lungs):** The lungs act as the power source, pushing air upward.
+- **Phonation (Vocal Folds):** Air passes through the larynx, causing the vocal folds to vibrate. The rate of vibration determines the **Fundamental Frequency ($F_0$ / pitch)**.
+- **Articulation & Resonance (Vocal Tract):** The vocal tract (mouth, nose, throat) filters the sound wave. Movements of the tongue, lips, and jaw create resonance peaks called **Formants ($F_1$, $F_2$, $F_3$)**, which characterize vowels.
+
+
+::: {.callout-warning}
+## Note of Caution & Construct Validity
+
+Never jump directly from waveform to construct. Think of it as a sequence:
+
+`construct -> mechanism -> expected vocal cue -> feature -> rival explanations -> validation evidence`.
+:::
+
+::: {.callout-note}
+## Check-in: 
+
+Write down one construct from your own research that might appear in voice. Then add one rival explanation that could produce the same acoustic cue.
+:::
+
+## The signal: From air pressure to R objects
+
+Core vocabulary:
+
+- **Amplitude:** how far the signal moves from its midpoint; often related to loudness or energy.
+- **Frequency:** cycles per second; pitch is tied to fundamental frequency (`f0`).
+- **Sampling rate:** how many measurements per second are stored.
+- **Channel:** mono or stereo recording.
+- **Bit depth:** precision of each sample.
+- **Wave object:** an R representation of audio data used by packages such as `tuneR`, `seewave`, or `voiceR`.
+
+
+---
+
+## First Audio Workflow
+
+We will begin with our first practical audio workflow using `tuneR` and `seewave`. We will analyze a user interaction where a person gets increasingly frustrated with their Amazon Alexa.
+
+{{< video alexa_video.mp4 >}}
+
+### Reading and Playing Sound Files
+
+```{r read-play-audio, warning=FALSE}
+# Read audio files of the two Alexa commands
+cmd1 <- readWave("voiceData/1_alexa/alexa_cmd1.wav")
+cmd2 <- readWave("voiceData/1_alexa/alexa_cmd2.wav")
+
+# Inspect the structure of the Wave objects
+cmd1
+cmd2
+
+# Play the audio file (eval=FALSE is used here to avoid hanging during rendering)
+# listen(cmd1)
+```
+
+::: {.callout-tip title="Mac audio playback"}
+## Important Note For Mac Users
+If `listen()` throws a *"Permission denied"* error, point `tuneR` at the system
+player: `tuneR::setWavPlayer('/usr/bin/afplay')`.
+:::
+
+Calling the two sounds objects shows that they share identical sampling rates, channel numbers, and bit rates. However, we already see differences in duration, with the second sound file being 820 milliseconds longer than the first, something we further explore later when testing specific differences at the feature level.
+
+Note that the `listen()` function has an `f` argument, providing the options to directly manipulate the sampling frequency rate (while listening; not of the raw data). 
+
+```{r play cmd1 sound with 1.1 times higher sampling frequency}
+#| eval: false
+listen(cmd1, f=cmd1@samp.rate*1.1)
+```
+
+```{r play cmd1 sound with 1.1 times lower sampling frequency}
+#| eval: false
+listen(cmd1, f=cmd1@samp.rate/1.1)
+```
+
+
+### Visualizing Waveforms & Spectrograms
+An **oscillogram** displays amplitude (loudness) over time. A **spectrogram** displays frequency over time, with color intensity indicating amplitude. Let's take a look at the breaks in the speech signal between commands. What do you think they reveal about the person?
+
+```{r visualize-audio}
+# Plot oscillograms comparing the two commands
+par(mfrow = c(2, 1))
+oscillo(cmd1, colwave="black", title = "First Command Waveform")
+oscillo(cmd2, colwave="blue", title = "Second Command Waveform")
+```
+
+The `spectro()` function by default only plots the frequency signal over time. With additional arguments to the function, we can further adjust the plotting range and also add a separate oscillogram on the bottom of the spectogram.
+
+```{r spectrogram-default}
+# Plot spectrogram of the first command
+spectro(cmd1)
+```
+
+```{r spectrogram-audio}
+# Plot spectrogram of the first command
+spectro(cmd1, flim=c(0, 6), osc=TRUE, dB="max0")
+```
+
+---
+
+## Exercises
+
+::: {.callout-note}
+## Repetition: Read, plot, listen
+1. Load `alexa_wakeword_1.wav`, `alexa_wakeword_2.wav`, and `alexa_wakeword_3.wav`; compare their durations.
+2. Plot an oscillogram and a spectrogram for each.
+3. `listen()` to them. Which sounds more frustrated, and which **visual** cue
+   tipped you off first?
+:::
+
+Now additional practice and extension. Let's concatenate the three wake-words using the `bind()` function, plot the concatenated waveform and spectrogram, and fit a linear model to the fundamental frequency contour using `fund()`.
+
+
+```{r ex-1-1}
+# Load the wakewords
+w1 <- readWave("voiceData/1_alexa/alexa_wakeword_1.wav")
+w2 <- readWave("voiceData/1_alexa/alexa_wakeword_2.wav")
+w3 <- readWave("voiceData/1_alexa/alexa_wakeword_3.wav")
+
+# Concatenate wakewords
+wake_all <- bind(w1, w2, w3)
+
+# Plot spectrogram
+spectro(wake_all, flim=c(0, 6), osc=TRUE, title="All Wakewords Spectrogram")
+```
+
+```{r ex-1-2}
+# Extract and plot F0 contour
+ff <- fund(wake_all, threshold=1, plot=TRUE)
+# Fit linear trend to show pitch change
+mod <- lm(ff[, 2] ~ ff[, 1])
+abline(mod, col="red", lwd=2, lty=2)
+```
+
+To complete our first day, we can now also save this new object. The seewave package offers the `savewav( )` function, designed for storing R sound objects as .wav files. 
+
+1.  **R Sound Object**: As the first argument, designate the R sound object that you intend to save as a .wav file.
+
+2.  **Sampling Frequency** (`f`): Next, specify the sampling frequency.
+
+3.  **Filename** (`filename`): Finally, provide the desired filename under which the edited sound object will be stored.
+
+It's worth noting that if the sampling frequency is not explicitly defined, the seewave package will automatically utilize the same sampling frequency as the edited R object, simplifying the saving process.
+
+```{r save sound file}
+savewav(wake_all, filename = "wakewords_combined.wav")  	
+```
+
+
+::: {.callout-note}
+### Discussion 
+*   **Emotional States:** Based on the F0 contour and spectrogram, what acoustic shifts indicate the speaker's emotional state change across wakewords? 
+*   **Reflection:** How could this physiological shift be used to automatically detect user frustration in call centers or smart home systems?
+:::
+
+
+## Capstone Checkpoint Day 1
+
+Now let's start to converge toward your own voice project and use the following canvas:
+
+| Prompt | Your answer |
+|---|---|
+| Research question | |
+| Why voice? | |
+| Voice role | Independent variable, dependent variable, mediator, moderator, etc. ||
+| Likely recording context | |
+| First feature candidate | |
+| Rival explanation | |
+| Ethical concerns | |
+
+---
+
+# Day 2: Data Collection & Preprocessing
+
+## Learning goals
+
+By the end of Day 2, participants can:
+
+- design a recording protocol that supports measurement validity;
+- document device, setting, consent, and metadata decisions;
+- preprocess audio without overwriting raw files;
+- create a reproducible folder structure for voice data.
+
+## Recording protocol
+
+Voice data quality is shaped before your analysis starts:
+
+- microphone type and placement;
+- room acoustics and background noise;
+- file format, codec, sampling rate, and channel;
+- task instructions and response length;
+- participant language, accent, fatigue, privacy, and social context;
+- whether the task is scripted, semi-structured, or naturalistic.
+
+![Summary of Recoding Guidelines; see Busquet, Efthymiou, Hildebrand 2023](micComparison_figureGuidelines.png)
+
+
+::: {.callout-important title="Voice is biometric data"}
+Recordings can identify a person. Always obtain informed consent that names voice capture,
+storage and analysis; under GDPR speech is *special-category* data.
+De-identify, restrict access, and pre-specify retention/deletion.
+:::
+
+---
+
+## Notes on Recommended Folder Structure in Projects
+
+```text
+data/
+  raw/              # untouched audio
+  processed/        # trimmed, converted, normalized audio
+  metadata/         # participant, device, trial, consent
+outputs/
+  features/         # acoustic and linguistic feature tables
+  transcripts/      # ASR output and quality flags
+  logs/             # prompts, model responses, errors
+reports/            # QMD, HTML, figures, summaries, etc.
+```
+
+## Preprocessing Pipeline
+
+Preprocessing transforms noisy, raw audio into clean signals suitable for feature extraction. We will look at trimming silence, Voice Activity Detection (VAD), and unvoiced frame filtering using `noSilence()` and `zapsilw()`.
+
+```{r preprocess-pipeline}
+# Remove leading/trailing silence
+cmd1_clean <- noSilence(cmd1)
+
+# Remove all unvoiced frames (gaps between speech) using an amplitude threshold of 1%
+cmd1_nosil <- zapsilw(cmd1, threshold=1, plot=FALSE, output="Wave")
+
+# Compare durations
+seewave::duration(cmd1)
+seewave::duration(cmd1_nosil)
+```
+
+```{r visualize-edited-files}
+# Plot oscillograms comparing the two commands
+par(mfrow = c(3, 1))
+oscillo(cmd1, colwave="black", title = "Original")
+oscillo(cmd1_clean, colwave="blue", title = "No Silence")
+oscillo(cmd1_nosil, colwave="green", title = "Remove Unvoiced Frames")
+```
+
+
+---
+
+## Application 1
+
+Now, let's write a loop that reads all the WAV files in the microphone test directory `voiceData/8_micTests/`, removes leading/trailing silences, normalizes the amplitude, and plots the cleaned waveforms.
+
+```{r, warning=FALSE}
+# Path to mic tests
+mic_dir <- "voiceData/8_micTests/"
+mic_files <- list.files(mic_dir, pattern = "\\.wav$")
+
+# Process first 3 files as a demonstration
+for(i in 1:min(4, length(mic_files))) {
+  file_path = file.path(mic_dir, mic_files[i])
+  wav_obj <- readWave(file_path)
+  
+  # Clean leading/trailing silence
+  cleaned_wav <- noSilence(wav_obj)
+  
+  # Plot
+  oscillo(cleaned_wav, title = paste("Cleaned:", mic_files[i]))
+}
+```
+
+## Application 2
+Now, let's move to the **"I go to the bar"** corpus where each speaker said the same sentence once **happy** and once **sad** (a paired design that controls for speaker).
+
+### Batch-read and parse metadata from filenames
+
+Filenames follow `ID_Emotion_Bar.wav`. The chunk below uses **base R**, to demonstrate the parsing logic and building toward a processed dataset.
+
+```{r parsing-demo}
+files <- c("spk01_Happy_Bar.wav", "spk01_Sad_Bar.wav",
+           "spk02_Happy_Bar.wav", "spk02_Sad_Bar.wav")
+
+audioDat <- data.frame(file = files, stringsAsFactors = FALSE)
+audioDat$user_id <- gsub("^(.+)_(Happy|Sad)_Bar\\.wav$", "\\1", audioDat$file)
+audioDat$emotion <- gsub("^.+_(Happy|Sad)_Bar\\.wav$",  "\\1", audioDat$file)
+audioDat
+```
+
+In your own project, you would list the directory first and then apply the above:
+
+```{r list-files}
+emo_dir <- "voiceData/7_BRM_paper_data/"
+emo_files <- list.files(emo_dir)
+
+audioDat <- data.frame(file = emo_files, stringsAsFactors = FALSE)
+audioDat$user_id <- gsub("^(.+)_(Happy|Sad)_Bar\\.wav$", "\\1", audioDat$file)
+audioDat$emotion <- gsub("^.+_(Happy|Sad)_Bar\\.wav$",  "\\1", audioDat$file)
+audioDat
+```
+
+
+::: {.callout-note}
+### Discussion
+Why is amplitude normalization crucial when comparing recordings from different participants? What errors could arise during the feature extraction phase (e.g. loudness/sone) if normalization is skipped?
+:::
+
+
+## Capstone Checkpoint Day 2
+
+Draft a data collection plan:
+
+| Design item | Decision |
+|---|---|
+| Speaker sample | |
+| Recording task | |
+| Device and setting | |
+| Consent details | |
+| Raw/processed storage | |
+| Exclusion rules | |
+| Open science sharing plan | |
+
+
+---
+
+# Day 3: Feature Extraction & Construct Building
+
+## Learning goals
+
+By the end of Day 3, participants can:
+
+- extract acoustic features manually using `soundgen` and in batches with `voiceR`;
+- distinguish feature families across time, amplitude, frequency, and spectral domains;
+- model paired happy/sad recordings;
+- discuss construct validity issues & context effects.
+
+## Feature families
+
+| Family | Examples | Behavioral interpretation |
+|---|---|---|
+| Time | duration, pauses, speech rate, voiced proportion | fluency, hesitation, planning, turn-taking |
+| Amplitude | RMS, intensity, loudness, energy | effort, arousal, emphasis, distance |
+| Frequency | f0 mean, f0 range, f0 variability | arousal, intonation, uncertainty, gender | 
+| Spectral / quality | HNR, entropy, jitter, shimmer, formants | voice quality, perturbation, breathiness, health indicator |
+
+---
+
+## Feature Extraction in R
+
+We can extract features manually with `soundgen::analyze()` or perform automated batch extraction using `voiceR::autoExtract()`.
+
+### Feature Extraction via `soundgen`
+```{r soundgen-extract}
+# Extract features from a single wav file
+feat_single <- analyze("voiceData/1_alexa/alexa_cmd1.wav", plot = FALSE)
+
+# Inspect summary features
+head(feat_single$summary[, c("duration","pitch_mean","pitch_sd","loudness_mean")])
+```
+
+### Batch Extraction via `voiceR`
+We will load recordings of speakers saying "I go to the bar" from the `7_BRM_paper_data` folder and extract vocal features.
+
+The `autoExtract()` function is the powerhouse of the voiceR package:
+
+- *Comprehensive Input*: It takes our list of wave objects (wav_list) as input
+
+- *File Format Specification*: fileType="wav" indicates we're working with WAV audio files
+
+- *Pattern Recognition*: fileNamePattern = "ID_Condition" tells voiceR that our filenames follow a pattern where:
+  - The first part is an identifier (speaker ID)
+  - The second part is a condition (Happy or Sad)
+
+- *Separator Definition*: `sep = "_"` specifies the underscore as the delimiter between filename components
+
+- *Parallel Processing*: `parallel = TRUE` enables multithreading for faster processing of multiple files
+
+```{r voiceR-extract, warning=FALSE, message=FALSE}
+# List wav files in the paper data folder
+emo_dir <- "voiceData/7_BRM_paper_data/"
+emo_files <- list.files(emo_dir)
+
+# Read wave files into a list
+wav_list <- list()
+for(i in 1:length(emo_files)) {
+  file_name <- emo_files[i]
+  wav_obj <- readWave(file.path(emo_dir, file_name))
+  # Use filename as name
+  name_key <- gsub("\\.wav$", "", file_name)
+  wav_list[[name_key]] <- wav_obj
+}
+
+# Run autoExtract in voiceR
+# (fileNamePattern defines the metadata components in the filename e.g. ID_Condition_null)
+voiceR_feats <- autoExtract(
+  audioList = wav_list, 
+  fileType = "wav", 
+  fileNamePattern = "ID_Condition", 
+  sep = "_", 
+  parallel = TRUE
+)
+
+# Inspect the structured feature dataset
+head(voiceR_feats[, 1:8])
+
+# Run autoReport to generate a report get a full summary
+#autoReport(voiceR_feats)
+```
+
+---
+
+## Exercises 
+
+### Modeling Speaker Emotion
+Using the `voiceR_feats` data frame extracted above:
+- Inspect the `Condition` column (automatically parsed from the filenames by `autoExtract()`).
+- Perform a t-test to check if average pitch (`mean_F0`) differs significantly between happy and sad speech.
+- Fit a logistic regression model in R to predict speaker emotion (`Condition`) from your  acoustic features (e.g., `mean_F0`).
+
+```{r ex-3-1}
+# 1. Inspect the automatically extracted Condition column
+table(voiceR_feats$Condition)
+
+# 2. t-test for pitch (F0 mean)
+t.test(mean_F0 ~ Condition, data = voiceR_feats)
+
+# 3. Fit predictive model
+model <- glm(as.factor(Condition) ~ mean_F0 + mean_loudness + duration , data = voiceR_feats, family = binomial)
+summary(model)
+```
+
+::: {.callout-note}
+### Discussion
+Look at the logistic regression output. Which acoustic features are the strongest predictors of emotional valence? Do the results match the physiological theories of vocal expressions we discussed?
+:::
+
+::: {.callout-important title="Mind Validity Issue"}
+ASR and acoustic models can underperform for some accents, ages and genders. Recall
+the **sociophonetics** lesson: vocal variation is socially structured, so subgroup
+checks are an important part of validity assessment (can your extracted features capture what you want them to measure?).
+:::
+
+## Capstone Checkpoint 3
+
+| Step | Your project |
+|---|---|
+| Construct | |
+| Mechanism | |
+| Expected vocal cue | |
+| Acoustic/linguistic feature | |
+| Aggregation level | |
+| Rival explanation(s) | |
+| Validation evidence | |
+
+---
+
+# Day 4: Speech-to-Text 
+
+## Learning goals
+
+By the end of Day 4, participants can:
+
+- transcribe audio with a speech-to-text API;
+- evaluate transcription quality and potential bias
+
+## Speech-to-Text and ASR Systems
+
+Converting speech to text (Automatic Speech Recognition or ASR) allows us to capture both *what* is said (verbal content) and *how* it is said (paralinguistics). Modern ASR systems utilize deep learning neural architectures like OpenAI's Whisper.
+
+### Transcription via OpenAI's Whisper API in R
+We use the `openai` package to call the API (make sure to add your own API key as discussed in class).
+
+```{r whisper-stt, eval=FALSE}
+library(openai)
+
+# Set API key
+Sys.setenv(OPENAI_API_KEY = "YOUR-API-KEY")
+
+# Transcribe command file
+transcript <- create_transcription(
+  file = "voiceData/1_alexa/alexa_cmd1.wav",
+  model = "whisper-1"
+)
+
+# Print transcription
+cat("Transcription:", transcript$text)
+```
+
+### Transcription via Google Cloud Speech-to-Text in R
+The `googleLanguageR` package offers direct bindings to Google Cloud's Language APIs. If you already have an OpenAI account, I suggest plugging in your API key and go with the `openai` package.
+
+```{r google-stt, eval=FALSE}
+library(googleLanguageR)
+
+# Authenticate using Google Cloud Service Account JSON
+gl_auth("path_to_service_account_credentials.json")
+
+# Transcribe audio file
+speech_result <- gl_speech(
+  "voiceData/1_alexa/alexa_cmd1.wav",
+  sampleRateHertz = 16000,
+  languageCode = "en-US"
+)
+
+# View results
+speech_result$transcript
+```
+
+
+---
+
+## Advanced Extensions
+
+### Audio Embeddings with `talk`
+Acoustic feature extraction measures specific dimensions. In contrast, **voice embeddings** represent the entire acoustic style and speaker profile in a high-dimensional vector. We can use the `talk` package to generate these embeddings, and then plug them into a linear PCA or non-linear t-SNE for dimension reduction. Note that the same logic applies as in other dimension reduction settings, i.e. we have to define ourselves what those dimensions and vectors mean.
+
+```{r talk-embeddings, eval=FALSE}
+library(talk)
+
+# Setup talk R environment dependencies (run once on setup)
+# talkrpp_install()
+# talkrpp_initialize(save_profile = TRUE)
+
+# Generate embeddings for an audio file
+wav_path <- "voiceData/1_alexa/alexa_cmd1.wav"
+emb <- talkEmbed(wav_path)
+
+# View dimensions
+dim(emb)
+head(emb)
+```
+
+Now let's revise our code to extract the embeddings for all files of the `I go to the bar`corpus.
+
+```{r}
+library(talk)
+library(foreach)
+library(doParallel)
+library(data.table)
+library(reticulate)
+
+# 1. Define paths
+emo_dir <- "voiceData/7_BRM_paper_data/"
+# Absolute path fallback:
+# emo_dir <- "/Users/childebrand/Dropbox/2_Teaching/2026_FS/1_GSERM_ESADE/voiceData/7_BRM_paper_data/"
+
+emo_files_paths <- list.files(emo_dir, pattern = "\\.wav$", full.names = TRUE)
+emo_files_names <- list.files(emo_dir, pattern = "\\.wav$", full.names = FALSE)
+
+# 2. Setup the parallel cluster (outfile = "" redirects stdout/stderr)
+num_cores <- min(9, parallel::detectCores() - 1)
+cl <- makeCluster(num_cores, outfile = "") 
+registerDoParallel(cl)
+
+cat("Spawning parallel cluster with", num_cores, "cores. Please wait...\n\n")
+
+# 3. Run the extraction in parallel (we removed the .packages argument)
+embeddings_list <- foreach(i = 1:length(emo_files_paths), 
+                           .errorhandling = "remove") %dopar% {
+  
+  # --- Load packages silently inside each worker process ---
+  suppressPackageStartupMessages(library(talk))
+  suppressPackageStartupMessages(library(reticulate))
+  
+  file_path <- emo_files_paths[i]
+  file_name <- emo_files_names[i]
+  
+  # --- Suppress Python/HuggingFace warnings ---
+  try({
+    py_run_string("
+import warnings
+warnings.filterwarnings('ignore') # Ignore general Python warnings
+import transformers
+transformers.logging.set_verbosity_error() # Suppress HuggingFace info/warnings
+")
+  }, silent = TRUE)
+  
+  # Print the active file to the console in real-time
+  cat(sprintf("[%d/%d] Analyzing: %s\n", i, length(emo_files_paths), file_name))
+  
+  # Extract the embedding
+  emb <- talk::talkEmbed(file_path)
+  
+  # Parse speaker ID and emotion condition from the filename (e.g., "10_Happy_Bar")
+  name_clean <- gsub("\\.wav$", "", file_name)
+  filename_components <- strsplit(name_clean, "_")[[1]]
+  user_id <- filename_components[1]
+  emotion <- filename_components[2]
+  
+  # Create the metadata columns data frame
+  metadata_df <- data.frame(
+    file_name = file_name,
+    user_id = user_id,
+    emotion = emotion,
+    stringsAsFactors = FALSE
+  )
+  
+  # Combine metadata and embeddings (placing metadata at the FRONT/left-most side)
+  emb_df <- cbind(metadata_df, as.data.frame(emb))
+  
+  return(emb_df)
+}
+
+# 4. CRITICAL: Stop cluster to free up memory
+stopCluster(cl)
+cat("\nExtraction complete! Cluster closed.\n")
+
+# 5. Bind all rows
+combined_embeddings <- rbindlist(embeddings_list, fill = TRUE)
+
+# 6. Verify that metadata columns are at the front
+print(head(combined_embeddings[, 1:8]))
+```
+
+
+```{r}
+reshape_attempt <- combined_embeddings |>
+  as_tibble() |>
+  rename(condition = emotion)
+
+#1. Prepare numeric data for PCA (exclude metadata AND ungroup)
+pca_input <- reshape_attempt |> #reshape_attempt
+  ungroup() |> 
+  select(starts_with("Dim"))
+
+# 2. Run PCA
+pca_output <- prcomp(pca_input, scale. = TRUE)
+
+# 3. Create a data frame for visualization and stats
+pca_df <- as_tibble(pca_output$x[, 1:2]) |>
+  bind_cols(reshape_attempt |> select(condition))
+
+# 4. Calculate variance explained
+var_explained <- pca_output$sdev^2 / sum(pca_output$sdev^2)
+pc1_var <- var_explained[1] * 100
+pc2_var <- var_explained[2] * 100
+
+# 5. Statistical Check: Does 'condition' explain the variance in PC1 or PC2?
+anova_pc1 <- summary(aov(PC1 ~ condition, data = pca_df))
+anova_pc2 <- summary(aov(PC2 ~ condition, data = pca_df))
+
+# Print findings
+cat("--- PCA Variance Explained ---\n")
+cat(sprintf("PC1: %.2f%%\n", pc1_var))
+cat(sprintf("PC2: %.2f%%\n\n", pc2_var))
+
+cat("--- ANOVA: Condition effect on PC1 ---\n")
+print(anova_pc1)
+cat("\n--- ANOVA: Condition effect on PC2 ---\n")
+print(anova_pc2)
+
+# 6. Generate the plot
+ggplot(pca_df, aes(x = PC1, y = PC2, color = condition)) +
+  geom_point(size = 5, alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "PCA of Voice Embeddings",
+    subtitle = paste0("PC1: ", round(pc1_var, 1), "% | PC2: ", round(pc2_var, 1), "% variance explained"),
+    x = paste0("PC1 (", round(pc1_var, 1), "%)"),
+    y = paste0("PC2 (", round(pc2_var, 1), "%)"),
+    color = "Condition"
+  ) +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+library(Rtsne)
+library(tidyverse)
+
+# 1. Prepare numeric matrix (removing grouping)
+tsne_input <- reshape_attempt |> 
+  ungroup() |> 
+  select(starts_with("Dim")) |> 
+  as.matrix()
+
+# 2. Run t-SNE
+# Note: With only 20 observations, perplexity must be low (typically < N/3).
+# We'll use perplexity = 5.
+set.seed(777) # For reproducibility
+tsne_out <- Rtsne(tsne_input, 
+                  perplexity = 5, 
+                  dims = 2, 
+                  check_duplicates = FALSE)
+
+# 3. Create plotting dataframe
+tsne_df <- as_tibble(tsne_out$Y) |>
+  rename(tsne1 = V1, tsne2 = V2) |>
+  bind_cols(reshape_attempt |> select(condition))
+
+# 4. Visualize
+ggplot(tsne_df, aes(x = tsne1, y = tsne2, color = condition)) +
+  geom_point(size = 5, alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "t-SNE of Voice Embeddings",
+    subtitle = "Perplexity = 5 (adjusted for small N)",
+    x = "t-SNE 1",
+    y = "t-SNE 2",
+    color = "Condition"
+  ) +
+  theme(legend.position = "bottom")
+```
+
+
+### Voice Agents (STT -> LLM -> TTS)
+A conversational AI voice agent links three components:
+$$\text{Audio Input} \xrightarrow{\text{STT}} \text{Text Transcript} \xrightarrow{\text{LLM}} \text{Text Response} \xrightarrow{\text{TTS}} \text{Audio Output}$$
+The field has shifted very rapidly and I generally recommend using any of the tools below. The marginal utility to take an existing huggingface implementation is declining sharply as you have full flexibility with any of the following tools. When developing sophisticated conversational agents like the one shown below, I recommend simply using tools like  **Claude Code**, **OpenAI Codex**, **Google Antigravity**, or **Google's AI Studio** to accelerate your prototyping and implementation. I will demonstrate a simple implementation in class and outline areas that require careful attention when you use such tools for "vibe coding" (e.g., data storage, privacy, etc.)
+
+![Example of an AI Agent Interface](Demo_AgentGemini.png)
+
+---
+
+# Day 5: Evaluation & Your Capstone Projects
+
+## Learning goals
+
+By the end of Day 5, participants can:
+
+- evaluate voice analytics claims across signal, feature, model, system, and human levels;
+- position voice measures in experimental designs;
+- present their capstone project idea and receive actionable feedback;
+- refine and finalize their capstone report.
+
+
+## Voice in experimental designs
+
+How do you intend to study voice in your project?
+
+- **dependent variable:** how a participant sounds after a manipulation;
+- **independent variable:** agent voice style, accent, speed, warmth, or confidence;
+- **mediator:** voice features explain treatment effects on downstream behavior;
+- **moderator:** speaker or agent voice changes treatment effectiveness;
+- **manipulation check:** acoustic/linguistic evidence that the intended voice style occurred;
+- **data collection interface:** the agent conducts an interview or task.
+
+::: {.callout-note}
+## Design check
+
+For your capstone, label the role of voice in the causal design. If there is no causal design, label the prediction or measurement design.
+:::
+
+## A simple evaluation framework:
+
+1. **Signal:** Is the audio usable and comparable?
+2. **Measure:** Are features reliable and theoretically linked?
+3. **Model:** Does the model generalize, calibrate, and avoid leakage?
+4. **System:** Does the agent work robustly, safely, and with acceptable latency (if you happen to use agents for data collection)?
+5. **Human:** Does the study respect participant privacy with clear consent?
+
+---
+
+## Capstone Report Outline
+
+1. **Research question and theory:** why voice analytics or a voice agent is needed.
+2. **Design:** participants, recording/agent context, procedure, and consent.
+3. **Measurement pipeline:** preprocessing, features, transcripts, embeddings, or logs.
+4. **Analysis/evaluation:** model, validation, robustness, and fairness checks.
+5. **Contribution and limitations:** what the voice component adds and what remains uncertain.
+
+
+## Course Summary & Key Takeaways
+
+1. Voice is a rich behavioral data layer — the *how*, not just the *what*.
+2. A principled pipeline (collect → preprocess → extract → model → evaluate) makes
+   it tractable and reproducible.
+3. Theory-driven feature mapping beats kitchen-sink extraction.
+4. Conversational agents turn voice from a data source into a research instrument.
+5. Validity, fairness and open, ethical practice are part of the method.
+
+## Further Resources
+
+- Hildebrand, Efthymiou,Busquet, Hampton, Hoffman & Novak (2020), [*Voice analytics in business research: Conceptual foundations, acoustic feature extraction, and applications*](https://doi.org/10.1016/j.jbusres.2020.09.020), Journal of Business Research.
+- Busquet, Efthymiou & Hildebrand (2023), [*Voice analytics in the wild: Validity and predictive accuracy of common audio-recording devices*](https://doi.org/10.3758/s13428-023-02139-9), Behavior Research Methods.
+- Busquet & Hildebrand (2023), [**voiceR** package](https://cran.r-project.org/package=voiceR) (CRAN).
+- Jurafsky & Martin, [*Speech and Language Processing*](https://web.stanford.edu/~jurafsky/slp3/) (3rd ed.).
+- Main Packages: `seewave`, `tuneR`, `soundgen`, `phonTools`, `voiceR`, `openai`,
+  `reticulate`, `googleLanguageR`, `text`, `talk`.
+
+
+---
+
+## Session info
+
+```{r session-info}
+sessionInfo()
+```
