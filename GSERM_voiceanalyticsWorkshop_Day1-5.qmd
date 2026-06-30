@@ -63,6 +63,7 @@ install.packages(c(
 Run `library(tuneR); library(seewave); library(soundgen)` with no errors. If that works, let's load all packages.
 :::
 
+
 ```{r setup, message=FALSE, warning=FALSE}
 # Acoustics & audio
 library(tuneR)
@@ -221,7 +222,7 @@ An **oscillogram** displays amplitude (loudness) over time. A **spectrogram** di
 # Plot oscillograms comparing the two commands
 par(mfrow = c(2, 1))
 oscillo(cmd1, colwave="black", title = "First Command Waveform")
-oscillo(cmd2, colwave="blue", title = "Second Command Waveform")
+oscillo(cmd2, colwave="blue", title = "Second Command Wavefolisten(rm")
 ```
 
 The `spectro()` function by default only plots the frequency signal over time. With additional arguments to the function, we can further adjust the plotting range and also add a separate oscillogram on the bottom of the spectogram.
@@ -375,10 +376,79 @@ seewave::duration(cmd1_nosil)
 
 ```{r visualize-edited-files}
 # Plot oscillograms comparing the two commands
-par(mfrow = c(3, 1))
+par(mfrow = c(1, 3))
 oscillo(cmd1, colwave="black", title = "Original")
 oscillo(cmd1_clean, colwave="blue", title = "No Silence")
 oscillo(cmd1_nosil, colwave="green", title = "Remove Unvoiced Frames")
+```
+
+### Frequency filtering with `fir()` 
+
+So far we have edited recordings in *time* (trimming silence, removing unvoiced frames). We can also edit them in *frequency*. The chunks below use a finite-impulse-response (FIR) filter to keep or drop specific frequency bands, controlled by the `from`/`to` range and the `bandpass` switch:
+
+- `bandpass = FALSE` **removes** the band (a band-stop) — here we cut out 3–5 kHz while keeping everything else.
+- `bandpass = TRUE` **keeps** the band — here we keep only 0–4 kHz, which acts as a low-pass that drops the high-frequency content.
+
+We then compare the mean frequency spectra of the original, band-stopped, and low-passed signals with `meanspec()` to see exactly which energy each filter removed.
+
+```{r}
+# Remove a band, e.g. 3–5 kHz, keep everything else
+w3_rmb <- fir(w3, from = 3000, to = 5000, bandpass = FALSE, output = "Wave")
+```
+
+```{r}
+# Low-pass: keep <=4 kHz, drop high-frequency content
+w3_lpass <- fir(w3, from = 0, to = 4000, bandpass = TRUE, output = "Wave")
+```
+
+```{r}
+par(mfrow=c(1,3))
+meanspec(w3)
+meanspec(w3_rmb)
+meanspec(w3_lpass)
+```
+
+---
+
+## Editing Files & Motivating Feature Extraction
+
+Raw recordings rarely begin at the moment of speech. Both of these clips are exactly 15 seconds, but the speakers start at different times — **Obama** earlier than **Trump**. Rather than hardcode those start times, we detect them *directly from the audio signal*. The lead-in is not true silence either — it contains low-level room noise — so a simple amplitude-based trimmer like `noSilence()` barely removes anything.
+
+```{r obama-trump-load}
+obama <- readWave("voiceData/3_obama_short/obama.srt.wav")
+trump <- readWave("voiceData/3_obama_short/trump.srt.wav")
+```
+
+We use `timer()`, which segments a recording into signal vs. pause periods from a smoothed amplitude envelope. The first speech segment's start time (`$s.start[1]`) is the onset. The `threshold` (% of max amplitude counted as "signal") and `msmooth` (envelope smoothing window) settings make this robust: smoothing keeps brief noise spikes from registering as spurious early segments.
+
+```{r onset-detection}
+obama_onset <- timer(obama, threshold = 5, plot = FALSE)$s.start[1]
+trump_onset <- timer(trump, threshold = 5, plot = FALSE)$s.start[1]
+```
+
+
+```{r raw-onsets}
+# Visualize the automatically detected speech onsets
+par(mfrow = c(1, 2))
+oscillo(obama, colwave = "black",
+        title = paste0("Obama onset ", round(obama_onset, 2), "s"))
+abline(v = obama_onset, col = "red", lwd = 2, lty = 2)
+
+oscillo(trump, colwave = "black",
+        title = paste0("Trump onset ", round(trump_onset, 2), "s"))
+abline(v = trump_onset, col = "red", lwd = 2, lty = 2)
+```
+
+```{r auto-cut}
+# Cut from the detected onset to the end of the clip (removes the leading silence)
+obama_cut <- extractWave(obama, from = obama_onset, to = seewave::duration(obama), xunit = "time")
+trump_cut <- extractWave(trump, from = trump_onset, to = seewave::duration(trump), xunit = "time")
+``` 
+
+```{r}
+par(mfrow = c(1, 2))
+oscillo(obama_cut,title="Obama Cut")
+oscillo(trump_cut,title="Trump Cut")
 ```
 
 
@@ -483,9 +553,71 @@ By the end of Day 3, participants can:
 
 ## Feature Extraction in R
 
-We can extract features manually with `soundgen::analyze()` or perform automated batch extraction using `voiceR::autoExtract()`.
+### From Editing to Comparable Features
+
+On the raw files, both speakers look identical on the only feature we have so far — duration (15 s vs 15 s). To say anything about *how* they speak, we need to extract features. But which ones?
+
+A natural first instinct is spectral or pitch features (mean F0, spectral centroid). The problem is that these clips were recorded on different setups, and pitch/spectral measures are sensitive to microphone, gain, and room acoustics — so comparing them across recordings risks measuring the *equipment* rather than the *speaker*. (Even with a robust tracker like `soundgen::analyze()`, we also find that aggressive frame-level de-silencing can itself distort pitch.)
+
+**Temporal and prosodic features sidestep this.** Speech onset, pause structure, and speaking rate depend on *timing*, not on amplitude calibration or frequency response, so they stay comparable across very different recording setups. We extract them with `timer()` (speech-vs-pause segmentation) and `soundgen::segment()` (syllable-nucleus detection), computed on the full recording so the natural pauses are preserved.
+
+```{r temporal-features}
+library(tidyverse)
+
+temporal_features <- function(wave, speaker) {
+  total_dur <- seewave::duration(wave)
+  tm  <- timer(wave, threshold = 5, msmooth = c(400, 0), plot = FALSE)            # speech vs pause
+  seg <- segment(as.numeric(wave@left), samplingRate = wave@samp.rate, plot = FALSE) # syllables
+
+  speech_time <- sum(tm$s)
+  n_syl       <- nrow(seg$bursts)
+
+  tibble(
+    speaker          = speaker,
+    onset_s          = round(tm$s.start[1], 2),
+    total_dur_s      = round(total_dur, 1),
+    speech_time_s    = round(speech_time, 1),
+    phonation_pct    = round(100 * speech_time / total_dur, 1),
+    n_pauses         = length(tm$p),
+    mean_pause_s     = round(mean(tm$p), 2),
+    n_syllables      = n_syl,                          # acoustic estimate, not a true word count
+    speech_rate_sps  = round(n_syl / total_dur, 2),    # syllables/s incl. pauses
+    articulation_sps = round(n_syl / speech_time, 2)   # syllables/s excl. pauses
+  )
+}
+
+feat <- bind_rows(
+  temporal_features(obama, "Obama"),
+  temporal_features(trump, "Trump")
+)
+feat
+```
+
+```{r temporal-contrast}
+feat |>
+  select(speaker, onset_s, articulation_sps, mean_pause_s, n_pauses, phonation_pct) |>
+  pivot_longer(-speaker, names_to = "feature", values_to = "value") |>
+  mutate(feature = recode(feature,
+    onset_s          = "Speech onset (s)",
+    articulation_sps = "Articulation rate (syl/s)",
+    mean_pause_s     = "Mean pause (s)",
+    n_pauses         = "Number of pauses",
+    phonation_pct    = "Phonation (% of clip)")) |>
+  ggplot(aes(speaker, value)) +
+  geom_col() +
+  facet_wrap(~ feature, scales = "free_y") +
+  labs(x = NULL, y = NULL, title = "Temporal/prosodic contrasts: Obama vs Trump")
+```
+
+The contrast is clear and, importantly, robust to the recording differences. Obama begins almost immediately and speaks quickly (~4 syllables/s) with many short pauses, while Trump starts several seconds in and speaks more slowly (~2 syllables/s) with fewer, longer pauses. Both fill a similar share of the clip with speech, so the difference lies in *pacing and pausing*, not in how much they talk.
+
+Two caveats. The syllable count comes from amplitude-based burst detection, so it is an **estimate** rather than a true word count — true word counts would require automatic speech recognition — though it is reliable enough for a relative comparison under identical settings. And the pause counts depend on the `timer()` threshold; we use the same value for both speakers so the comparison is fair, but the absolute numbers shift with different thresholds.
+
 
 ### Feature Extraction via `soundgen`
+
+We can extract features manually with `soundgen::analyze()` or perform automated batch extraction using `voiceR::autoExtract()`.
+
 ```{r soundgen-extract}
 # Extract features from a single wav file
 feat_single <- analyze("voiceData/1_alexa/alexa_cmd1.wav", plot = FALSE)
