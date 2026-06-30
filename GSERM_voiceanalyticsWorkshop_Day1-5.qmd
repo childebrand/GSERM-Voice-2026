@@ -567,22 +567,22 @@ library(tidyverse)
 temporal_features <- function(wave, speaker) {
   total_dur <- seewave::duration(wave)
   tm  <- timer(wave, threshold = 5, msmooth = c(400, 0), plot = FALSE)            # speech vs pause
-  seg <- segment(as.numeric(wave@left), samplingRate = wave@samp.rate, plot = FALSE) # syllables
+  seg <- segment(wave) # syllables
 
   speech_time <- sum(tm$s)
   n_syl       <- nrow(seg$bursts)
 
   tibble(
     speaker          = speaker,
-    onset_s          = round(tm$s.start[1], 2),
-    total_dur_s      = round(total_dur, 1),
-    speech_time_s    = round(speech_time, 1),
-    phonation_pct    = round(100 * speech_time / total_dur, 1),
+    onset_s          = tm$s.start[1],
+    total_dur_s      = total_dur,
+    speech_time_s    = speech_time,
+    phonation_pct    = 100 * speech_time / total_dur,
     n_pauses         = length(tm$p),
-    mean_pause_s     = round(mean(tm$p), 2),
+    mean_pause_s     = mean(tm$p),
     n_syllables      = n_syl,                          # acoustic estimate, not a true word count
-    speech_rate_sps  = round(n_syl / total_dur, 2),    # syllables/s incl. pauses
-    articulation_sps = round(n_syl / speech_time, 2)   # syllables/s excl. pauses
+    speech_rate_sps  = n_syl / total_dur,    # syllables/s incl. pauses
+    articulation_sps = n_syl / speech_time   # syllables/s excl. pauses
   )
 }
 
@@ -594,19 +594,19 @@ feat
 ```
 
 ```{r temporal-contrast}
-feat |>
-  select(speaker, onset_s, articulation_sps, mean_pause_s, n_pauses, phonation_pct) |>
-  pivot_longer(-speaker, names_to = "feature", values_to = "value") |>
+feat %>% 
+  select(speaker, onset_s, articulation_sps, n_pauses, mean_pause_s, phonation_pct) %>% 
+  pivot_longer(-speaker, names_to = "feature", values_to = "value") %>% 
   mutate(feature = recode(feature,
-    onset_s          = "Speech onset (s)",
-    articulation_sps = "Articulation rate (syl/s)",
-    mean_pause_s     = "Mean pause (s)",
-    n_pauses         = "Number of pauses",
-    phonation_pct    = "Phonation (% of clip)")) |>
+    onset_s          = "1_Speech onset (s)",
+    articulation_sps = "2_Articulation rate (syl/s)",
+    n_pauses         = "3_Number of pauses",
+    mean_pause_s     = "4_Mean pause (s)",
+    phonation_pct    = "5_Phonation (% of clip)")) %>% 
   ggplot(aes(speaker, value)) +
   geom_col() +
-  facet_wrap(~ feature, scales = "free_y") +
-  labs(x = NULL, y = NULL, title = "Temporal/prosodic contrasts: Obama vs Trump")
+  facet_wrap(~ feature, nrow=1,ncol=5,scales = "free_y") +
+  labs(x = NULL, y = NULL, title = "Temporal/prosodic contrasts: Obama vs. Trump")
 ```
 
 The contrast is clear and, importantly, robust to the recording differences. Obama begins almost immediately and speaks quickly (~4 syllables/s) with many short pauses, while Trump starts several seconds in and speaks more slowly (~2 syllables/s) with fewer, longer pauses. Both fill a similar share of the clip with speech, so the difference lies in *pacing and pausing*, not in how much they talk.
@@ -620,10 +620,20 @@ We can extract features manually with `soundgen::analyze()` or perform automated
 
 ```{r soundgen-extract}
 # Extract features from a single wav file
-feat_single <- analyze("voiceData/1_alexa/alexa_cmd1.wav", plot = FALSE)
+feat_cmd1 <- analyze(w1, plot = FALSE)
+feat_cmd2 <- analyze(w2, plot = FALSE)
+feat_cmd3 <- analyze(w3, plot = FALSE)
 
 # Inspect summary features
-head(feat_single$summary[, c("duration","pitch_mean","pitch_sd","loudness_mean")])
+fcmd1 <- feat_cmd1$summary[, c("duration","pitch_mean","amplVoiced_mean","HNR_mean")]
+fcmd2 <- feat_cmd2$summary[, c("duration","pitch_mean","amplVoiced_mean","HNR_mean")]
+fcmd3 <- feat_cmd3$summary[, c("duration","pitch_mean","amplVoiced_mean","HNR_mean")]
+
+table <- bind_rows(
+  fcmd1, fcmd2,fcmd3) %>% 
+  mutate(Type=c("First WK","Second WK", "Third WK"),.before=1)
+table
+
 ```
 
 ### Batch Extraction via `voiceR`
@@ -665,13 +675,16 @@ voiceR_feats <- autoExtract(
   fileType = "wav", 
   fileNamePattern = "ID_Condition", 
   sep = "_", 
-  parallel = TRUE
+  parallel = TRUE,
+  extended = TRUE
 )
 
 # Inspect the structured feature dataset
-head(voiceR_feats[, 1:8])
+str(voiceR_feats)
+head(voiceR_feats)
 
 # Run autoReport to generate a report get a full summary
+# Note though that you need to set extended = FALSE as we don't run the report on all 100+ features. The report appears in your working directory.
 #autoReport(voiceR_feats)
 ```
 
@@ -682,18 +695,18 @@ head(voiceR_feats[, 1:8])
 ### Modeling Speaker Emotion
 Using the `voiceR_feats` data frame extracted above:
 - Inspect the `Condition` column (automatically parsed from the filenames by `autoExtract()`).
-- Perform a t-test to check if average pitch (`mean_F0`) differs significantly between happy and sad speech.
-- Fit a logistic regression model in R to predict speaker emotion (`Condition`) from your  acoustic features (e.g., `mean_F0`).
+- Perform a t-test to check if average pitch (`pitch_mean`) differs significantly between happy and sad speech.
+- Fit a logistic regression model in R to predict pitch_mean emotion (`Condition`) from your  acoustic features (e.g., `mean_F0`).
 
 ```{r ex-3-1}
 # 1. Inspect the automatically extracted Condition column
 table(voiceR_feats$Condition)
 
 # 2. t-test for pitch (F0 mean)
-t.test(mean_F0 ~ Condition, data = voiceR_feats)
+t.test(amplVoiced_mean ~ Condition, data = voiceR_feats)
 
 # 3. Fit predictive model
-model <- glm(as.factor(Condition) ~ mean_F0 + mean_loudness + duration , data = voiceR_feats, family = binomial)
+model <- glm(as.factor(Condition) ~ pitch_mean + amplVoiced_mean + duration , data = voiceR_feats, family = binomial)
 summary(model)
 ```
 
@@ -707,6 +720,7 @@ ASR and acoustic models can underperform for some accents, ages and genders. Rec
 the **sociophonetics** lesson: vocal variation is socially structured, so subgroup
 checks are an important part of validity assessment (can your extracted features capture what you want them to measure?).
 :::
+
 
 ## Capstone Checkpoint 3
 
@@ -738,20 +752,27 @@ Converting speech to text (Automatic Speech Recognition or ASR) allows us to cap
 ### Transcription via OpenAI's Whisper API in R
 We use the `openai` package to call the API (make sure to add your own API key as discussed in class).
 
-```{r whisper-stt, eval=FALSE}
+
+```{r whisper-stt, eval=TRUE}
 library(openai)
 
 # Set API key
-Sys.setenv(OPENAI_API_KEY = "YOUR-API-KEY")
+#Sys.setenv(OPENAI_API_KEY = "YOUR-OPENAI-KEY")
 
-# Transcribe command file
-transcript <- create_transcription(
-  file = "voiceData/1_alexa/alexa_cmd1.wav",
+# Transcribe file
+transcr_sensitive <- create_transcription(
+  file = "voiceData/6_sensitive/sens.wav",
+  model = "whisper-1"
+)
+
+transcr_obama <- create_transcription(
+  file = "voiceData/3_obama_short/obama.srt.wav",
   model = "whisper-1"
 )
 
 # Print transcription
-cat("Transcription:", transcript$text)
+transcr_sensitive$text
+transcr_obama$text
 ```
 
 ### Transcription via Google Cloud Speech-to-Text in R
@@ -975,7 +996,7 @@ A conversational AI voice agent links three components:
 $$\text{Audio Input} \xrightarrow{\text{STT}} \text{Text Transcript} \xrightarrow{\text{LLM}} \text{Text Response} \xrightarrow{\text{TTS}} \text{Audio Output}$$
 The field has shifted very rapidly and I generally recommend using any of the tools below. The marginal utility to take an existing huggingface implementation is declining sharply as you have full flexibility with any of the following tools. When developing sophisticated conversational agents like the one shown below, I recommend simply using tools like  **Claude Code**, **OpenAI Codex**, **Google Antigravity**, or **Google's AI Studio** to accelerate your prototyping and implementation. I will demonstrate a simple implementation in class and outline areas that require careful attention when you use such tools for "vibe coding" (e.g., data storage, privacy, etc.)
 
-![Example of an AI Agent Interface](Demo_AgentGemini.png)
+![Simple, Vibe-Coded AI Agent Using Google Antigravity](Demo_AgentGemini.png)
 
 ---
 

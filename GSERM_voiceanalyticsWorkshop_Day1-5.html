@@ -734,9 +734,10 @@ reports/            # QMD, HTML, figures, summaries, etc.</code></pre>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(obama, <span class="at">colwave =</span> <span class="st">"black"</span>,</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Obama onset "</span>, <span class="fu">round</span>(obama_onset, <span class="dv">2</span>), <span class="st">"s"</span>))</span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> obama_onset, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(trump, <span class="at">colwave =</span> <span class="st">"black"</span>,</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Trump onset "</span>, <span class="fu">round</span>(trump_onset, <span class="dv">2</span>), <span class="st">"s"</span>))</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> trump_onset, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">oscillo</span>(trump, <span class="at">colwave =</span> <span class="st">"black"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Trump onset "</span>, <span class="fu">round</span>(trump_onset, <span class="dv">2</span>), <span class="st">"s"</span>))</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> trump_onset, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/raw-onsets-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -992,22 +993,22 @@ Discussion
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>temporal_features <span class="ot">&lt;-</span> <span class="cf">function</span>(wave, speaker) {</span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  total_dur <span class="ot">&lt;-</span> seewave<span class="sc">::</span><span class="fu">duration</span>(wave)</span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  tm  <span class="ot">&lt;-</span> <span class="fu">timer</span>(wave, <span class="at">threshold =</span> <span class="dv">5</span>, <span class="at">msmooth =</span> <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">0</span>), <span class="at">plot =</span> <span class="cn">FALSE</span>)            <span class="co"># speech vs pause</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  seg <span class="ot">&lt;-</span> <span class="fu">segment</span>(<span class="fu">as.numeric</span>(wave<span class="sc">@</span>left), <span class="at">samplingRate =</span> wave<span class="sc">@</span>samp.rate, <span class="at">plot =</span> <span class="cn">FALSE</span>) <span class="co"># syllables</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  seg <span class="ot">&lt;-</span> <span class="fu">segment</span>(wave) <span class="co"># syllables</span></span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  speech_time <span class="ot">&lt;-</span> <span class="fu">sum</span>(tm<span class="sc">$</span>s)</span>
 <span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  n_syl       <span class="ot">&lt;-</span> <span class="fu">nrow</span>(seg<span class="sc">$</span>bursts)</span>
 <span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
 <span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">speaker          =</span> speaker,</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">onset_s          =</span> <span class="fu">round</span>(tm<span class="sc">$</span>s.start[<span class="dv">1</span>], <span class="dv">2</span>),</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_dur_s      =</span> <span class="fu">round</span>(total_dur, <span class="dv">1</span>),</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">speech_time_s    =</span> <span class="fu">round</span>(speech_time, <span class="dv">1</span>),</span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">phonation_pct    =</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> speech_time <span class="sc">/</span> total_dur, <span class="dv">1</span>),</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">onset_s          =</span> tm<span class="sc">$</span>s.start[<span class="dv">1</span>],</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_dur_s      =</span> total_dur,</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">speech_time_s    =</span> speech_time,</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">phonation_pct    =</span> <span class="dv">100</span> <span class="sc">*</span> speech_time <span class="sc">/</span> total_dur,</span>
 <span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_pauses         =</span> <span class="fu">length</span>(tm<span class="sc">$</span>p),</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_pause_s     =</span> <span class="fu">round</span>(<span class="fu">mean</span>(tm<span class="sc">$</span>p), <span class="dv">2</span>),</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_pause_s     =</span> <span class="fu">mean</span>(tm<span class="sc">$</span>p),</span>
 <span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_syllables      =</span> n_syl,                          <span class="co"># acoustic estimate, not a true word count</span></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">speech_rate_sps  =</span> <span class="fu">round</span>(n_syl <span class="sc">/</span> total_dur, <span class="dv">2</span>),    <span class="co"># syllables/s incl. pauses</span></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">articulation_sps =</span> <span class="fu">round</span>(n_syl <span class="sc">/</span> speech_time, <span class="dv">2</span>)   <span class="co"># syllables/s excl. pauses</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">speech_rate_sps  =</span> n_syl <span class="sc">/</span> total_dur,    <span class="co"># syllables/s incl. pauses</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">articulation_sps =</span> n_syl <span class="sc">/</span> speech_time   <span class="co"># syllables/s excl. pauses</span></span>
 <span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a></span>
@@ -1032,26 +1033,26 @@ Discussion
 <pre><code># A tibble: 2 × 10
   speaker onset_s total_dur_s speech_time_s phonation_pct n_pauses mean_pause_s
   &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;    &lt;int&gt;        &lt;dbl&gt;
-1 Obama      0.57          15           7.3          49         45         0.17
-2 Trump      4.81          15           6.5          43.2       14         0.61
+1 Obama     0.572          15          7.35          49.0       45        0.170
+2 Trump     4.81           15          6.48          43.2       14        0.608
 # ℹ 3 more variables: n_syllables &lt;int&gt;, speech_rate_sps &lt;dbl&gt;,
 #   articulation_sps &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>feat <span class="sc">|&gt;</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(speaker, onset_s, articulation_sps, mean_pause_s, n_pauses, phonation_pct) <span class="sc">|&gt;</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>speaker, <span class="at">names_to =</span> <span class="st">"feature"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>feat <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(speaker, onset_s, articulation_sps, n_pauses, mean_pause_s, phonation_pct) <span class="sc">%&gt;%</span> </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>speaker, <span class="at">names_to =</span> <span class="st">"feature"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">recode</span>(feature,</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">onset_s          =</span> <span class="st">"Speech onset (s)"</span>,</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">articulation_sps =</span> <span class="st">"Articulation rate (syl/s)"</span>,</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_pause_s     =</span> <span class="st">"Mean pause (s)"</span>,</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_pauses         =</span> <span class="st">"Number of pauses"</span>,</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">phonation_pct    =</span> <span class="st">"Phonation (% of clip)"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">onset_s          =</span> <span class="st">"1_Speech onset (s)"</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">articulation_sps =</span> <span class="st">"2_Articulation rate (syl/s)"</span>,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_pauses         =</span> <span class="st">"3_Number of pauses"</span>,</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_pause_s     =</span> <span class="st">"4_Mean pause (s)"</span>,</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">phonation_pct    =</span> <span class="st">"5_Phonation (% of clip)"</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(speaker, value)) <span class="sc">+</span></span>
 <span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> feature, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">"Temporal/prosodic contrasts: Obama vs Trump"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> feature, <span class="at">nrow=</span><span class="dv">1</span>,<span class="at">ncol=</span><span class="dv">5</span>,<span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">"Temporal/prosodic contrasts: Obama vs. Trump"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/temporal-contrast-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -1064,13 +1065,24 @@ Discussion
 <p>We can extract features manually with <code>soundgen::analyze()</code> or perform automated batch extraction using <code>voiceR::autoExtract()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract features from a single wav file</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>feat_single <span class="ot">&lt;-</span> <span class="fu">analyze</span>(<span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect summary features</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(feat_single<span class="sc">$</span>summary[, <span class="fu">c</span>(<span class="st">"duration"</span>,<span class="st">"pitch_mean"</span>,<span class="st">"pitch_sd"</span>,<span class="st">"loudness_mean"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>feat_cmd1 <span class="ot">&lt;-</span> <span class="fu">analyze</span>(w1, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>feat_cmd2 <span class="ot">&lt;-</span> <span class="fu">analyze</span>(w2, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>feat_cmd3 <span class="ot">&lt;-</span> <span class="fu">analyze</span>(w3, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect summary features</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>fcmd1 <span class="ot">&lt;-</span> feat_cmd1<span class="sc">$</span>summary[, <span class="fu">c</span>(<span class="st">"duration"</span>,<span class="st">"pitch_mean"</span>,<span class="st">"amplVoiced_mean"</span>,<span class="st">"HNR_mean"</span>)]</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>fcmd2 <span class="ot">&lt;-</span> feat_cmd2<span class="sc">$</span>summary[, <span class="fu">c</span>(<span class="st">"duration"</span>,<span class="st">"pitch_mean"</span>,<span class="st">"amplVoiced_mean"</span>,<span class="st">"HNR_mean"</span>)]</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>fcmd3 <span class="ot">&lt;-</span> feat_cmd3<span class="sc">$</span>summary[, <span class="fu">c</span>(<span class="st">"duration"</span>,<span class="st">"pitch_mean"</span>,<span class="st">"amplVoiced_mean"</span>,<span class="st">"HNR_mean"</span>)]</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  fcmd1, fcmd2,fcmd3) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type=</span><span class="fu">c</span>(<span class="st">"First WK"</span>,<span class="st">"Second WK"</span>, <span class="st">"Third WK"</span>),<span class="at">.before=</span><span class="dv">1</span>)</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  duration pitch_mean pitch_sd loudness_mean
-1 2.314082   236.7432 66.66292      10.89368</code></pre>
+<pre><code>       Type  duration pitch_mean amplVoiced_mean HNR_mean
+1  First WK 0.7007256   174.3044      0.07405254 8.334501
+2 Second WK 0.7438549   278.6762      0.11284184 6.773517
+3  Third WK 1.0457143   292.9051      0.19920445 6.503770</code></pre>
 </div>
 </div>
 </section>
@@ -1111,29 +1123,289 @@ Discussion
 <span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileType =</span> <span class="st">"wav"</span>, </span>
 <span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">fileNamePattern =</span> <span class="st">"ID_Condition"</span>, </span>
 <span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">"_"</span>, </span>
-<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="cn">TRUE</span></span>
-<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structured feature dataset</span></span>
-<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(voiceR_feats[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">extended =</span> <span class="cn">TRUE</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the structured feature dataset</span></span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(voiceR_feats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  duration voice_breaks_percent    RMS_env mean_loudness   mean_F0     sd_F0
-1 1.000454           0.41025641 0.33717440     13.198637 132.66760 15.888255
-2 0.973356           0.24324324 0.09030643      5.248221  89.15728  9.599553
-3 1.161882           0.28888889 0.17305893      9.211309 260.01141 50.122066
-4 1.174762           0.02173913 0.17109355      9.333324 220.00266 50.670449
-5 1.076145           0.50000000 0.19271910      9.502658 179.89215 87.176346
-6 1.129070           0.18181818 0.05780810      3.457799 116.18305  5.918873
-  mean_entropy  mean_HNR
-1   0.05310476  7.370900
-2   0.07857337  8.452562
-3   0.10605244  9.192272
-4   0.10502572 11.411364
-5   0.06882506  7.265751
-6   0.13605099 10.236111</code></pre>
+<pre><code>'data.frame':   20 obs. of  113 variables:
+ $ duration               : num  1 0.973 1.162 1.175 1.076 ...
+ $ Condition              : chr  "Happy" "Sad" "Happy" "Sad" ...
+ $ ID                     : chr  "5a2900b06a18b8f180655a8081e8b081" "5a2900b06a18b8f180655a8081e8b081" "5b438f516066ad470d3be72c52005251" "5b438f516066ad470d3be72c52005251" ...
+ $ file                   : chr  "sound" "sound" "sound" "sound" ...
+ $ duration_noSilence     : num  0.925 0.95 1.1 1.15 1.05 ...
+ $ voiced                 : num  0.59 0.757 0.711 0.978 0.5 ...
+ $ voiced_noSilence       : num  0.639 0.757 0.744 1.023 0.525 ...
+ $ amEnvDep_mean          : num  0.169 0.195 0.269 0.202 0.164 ...
+ $ amEnvDep_sd            : num  0.03974 0.00882 0.06799 0.01145 0.02237 ...
+ $ amEnvDepVoiced_mean    : num  0.19 0.195 0.284 0.202 0.156 ...
+ $ amEnvDepVoiced_sd      : num  0.03438 0.00937 0.06614 0.01145 0.01237 ...
+ $ amEnvFreq_mean         : num  71.5 33.7 11.6 36.4 12.3 ...
+ $ amEnvFreq_sd           : num  56.068 26.244 0.785 43.933 1.471 ...
+ $ amEnvFreqVoiced_mean   : num  55 32.2 11.8 36.4 12.1 ...
+ $ amEnvFreqVoiced_sd     : num  51.051 25.164 0.797 43.933 1.642 ...
+ $ amMsFreq_mean          : num  74.4 87.3 150.4 94.6 99.2 ...
+ $ amMsFreq_sd            : num  25.09 8.37 31.11 45.42 25.65 ...
+ $ amMsFreqVoiced_mean    : num  66.4 87.4 163 94.6 105.5 ...
+ $ amMsFreqVoiced_sd      : num  20.3 9.27 20.15 45.42 28.67 ...
+ $ amMsPurity_mean        : num  -29.2 -25.3 -45.8 -35.1 -33.8 ...
+ $ amMsPurity_sd          : num  5.83 2.03 6.6 11.2 6.58 ...
+ $ amMsPurityVoiced_mean  : num  -28.1 -25.3 -48.8 -35.1 -36 ...
+ $ amMsPurityVoiced_sd    : num  5.24 2.31 2.49 11.2 6.68 ...
+ $ ampl_mean              : num  0.1684 0.0523 0.0909 0.0785 0.0923 ...
+ $ ampl_sd                : num  0.0973 0.0209 0.0453 0.0514 0.0517 ...
+ $ ampl_noSilence_mean    : num  0.1802 0.0523 0.0943 0.0812 0.0958 ...
+ $ ampl_noSilence_sd      : num  0.0918 0.0209 0.0433 0.051 0.0506 ...
+ $ amplVoiced_mean        : num  0.1837 0.0563 0.1065 0.0798 0.0985 ...
+ $ amplVoiced_sd          : num  0.0967 0.0211 0.0411 0.0512 0.0443 ...
+ $ CPP_mean               : num  10.48 11.36 11.62 12.22 9.45 ...
+ $ CPP_sd                 : num  2.77 2.41 2.45 2.95 3.11 ...
+ $ dom_mean               : num  137 241 244 220 161 ...
+ $ dom_sd                 : num  20.8 68.6 52.7 51.8 49.5 ...
+ $ domVoiced_mean         : num  131 253 259 220 161 ...
+ $ domVoiced_sd           : num  16.1 70.4 50.6 51.8 48.4 ...
+ $ entropy_mean           : num  0.0531 0.0786 0.1061 0.105 0.0688 ...
+ $ entropy_sd             : num  0.0434 0.0539 0.0612 0.0514 0.0477 ...
+ $ entropySh_mean         : num  0.0531 0.0786 0.1061 0.105 0.0688 ...
+ $ entropySh_sd           : num  0.0434 0.0539 0.0612 0.0514 0.0477 ...
+ $ entropyShVoiced_mean   : num  0.0611 0.0773 0.098 0.1039 0.0641 ...
+ $ entropyShVoiced_sd     : num  0.0535 0.0599 0.0422 0.0514 0.0257 ...
+ $ entropyVoiced_mean     : num  0.0611 0.0773 0.098 0.1039 0.0641 ...
+ $ entropyVoiced_sd       : num  0.0535 0.0599 0.0422 0.0514 0.0257 ...
+ $ f1_freq_mean           : num  512 510 721 642 523 ...
+ $ f1_freq_sd             : num  163 280 253 160 273 ...
+ $ f1_width_mean          : num  219 158 222 243 143 ...
+ $ f1_width_sd            : num  137.1 130.2 148.8 142.9 82.6 ...
+ $ f2_freq_mean           : num  1329 1451 1718 1489 1364 ...
+ $ f2_freq_sd             : num  304 498 680 401 470 ...
+ $ f2_width_mean          : num  171 192 262 217 187 ...
+ $ f2_width_sd            : num  120 114 122 142 163 ...
+ $ f3_freq_mean           : num  2436 3077 2984 2697 2596 ...
+ $ f3_freq_sd             : num  499 2735 819 514 499 ...
+ $ f3_width_mean          : num  248 285 201 211 223 ...
+ $ f3_width_sd            : num  127 140 134 123 141 ...
+ $ flux_mean              : num  0.0633 0.1026 0.0717 0.0525 0.113 ...
+ $ flux_sd                : num  0.081 0.1474 0.0955 0.0973 0.1392 ...
+ $ fmDep_mean             : num  0.307 0.235 0.373 0.5 1.017 ...
+ $ fmDep_sd               : num  0.0324 0.05 0.0892 0.1836 0.3897 ...
+ $ fmFreq_mean            : num  6.67 6.67 6.25 5.46 6 ...
+ $ fmFreq_sd              : num  0 0 0.316 0 0 ...
+ $ fmPurity_mean          : logi  NA NA NA NA NA NA ...
+ $ fmPurity_sd            : logi  NA NA NA NA NA NA ...
+ $ harmEnergy_mean        : num  8.65 10.51 7.25 7.51 6.12 ...
+ $ harmEnergy_sd          : num  3.04 1.77 2.28 2.34 5.14 ...
+ $ harmHeight_mean        : num  1825 1122 2947 2902 1340 ...
+ $ harmHeight_sd          : num  1240 519 1384 2075 962 ...
+ $ HNR_mean               : num  7.37 8.45 9.19 11.41 7.27 ...
+ $ HNR_sd                 : num  3.34 3.01 4.22 4.7 2.45 ...
+ $ HNRVoiced_mean         : num  7.37 8.45 9.19 11.41 7.27 ...
+ $ HNRVoiced_sd           : num  3.34 3.01 4.22 4.7 2.45 ...
+ $ loudness_mean          : num  13.2 5.25 9.21 9.33 9.5 ...
+ $ loudness_sd            : num  5.66 1.41 3.23 3.6 4.48 ...
+ $ loudnessVoiced_mean    : num  13.44 5.61 10.28 9.45 9.85 ...
+ $ loudnessVoiced_sd      : num  5.67 1.27 2.94 3.56 4.35 ...
+ $ novelty_mean           : num  0.238 0.202 0.231 0.254 0.194 ...
+ $ novelty_sd             : num  0.1386 0.123 0.0902 0.0733 0.1216 ...
+ $ noveltyVoiced_mean     : num  0.27 0.169 0.235 0.252 0.209 ...
+ $ noveltyVoiced_sd       : num  0.1435 0.1126 0.0853 0.073 0.1311 ...
+ $ peakFreq_mean          : num  431 279 603 451 437 ...
+ $ peakFreq_sd            : num  264 141 309 532 325 ...
+ $ peakFreqVoiced_mean    : num  331 300 693 451 381 ...
+ $ peakFreqVoiced_sd      : num  190 144 300 532 273 ...
+ $ pitch_mean             : num  132.7 89.2 260 220 179.9 ...
+ $ pitch_sd               : num  15.9 9.6 50.1 50.7 87.2 ...
+ $ quartile25_mean        : num  376 261 493 483 344 ...
+ $ quartile25_sd          : num  142.4 67.2 191.5 396.4 155 ...
+ $ quartile25Voiced_mean  : num  306 271 522 483 312 ...
+ $ quartile25Voiced_sd    : num  116.6 62.2 183.8 396.4 145.5 ...
+ $ quartile50_mean        : num  714 544 873 923 594 ...
+ $ quartile50_sd          : num  314 390 481 697 311 ...
+ $ quartile50Voiced_mean  : num  586 565 812 923 491 ...
+ $ quartile50Voiced_sd    : num  287 413 271 697 226 ...
+ $ quartile75_mean        : num  1585 1276 1809 1784 1181 ...
+ $ quartile75_sd          : num  874 1322 1193 1053 802 ...
+ $ quartile75Voiced_mean  : num  1605 1386 1640 1784 1103 ...
+ $ quartile75Voiced_sd    : num  1046 1482 648 1053 621 ...
+ $ roughness_mean         : num  34.5 32.2 31.2 28.4 34.6 ...
+ $ roughness_sd           : num  1.28 2.75 2.87 3.07 4.59 ...
+  [list output truncated]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autoReport to generate a report get a full summary</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co">#autoReport(voiceR_feats)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(voiceR_feats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  duration Condition                               ID  file duration_noSilence
+1 1.000454     Happy 5a2900b06a18b8f180655a8081e8b081 sound          0.9246032
+2 0.973356       Sad 5a2900b06a18b8f180655a8081e8b081 sound          0.9495918
+3 1.161882     Happy 5b438f516066ad470d3be72c52005251 sound          1.0995238
+4 1.174762       Sad 5b438f516066ad470d3be72c52005251 sound          1.1495011
+5 1.076145     Happy 7b7359b711c481311825da58bce2fd5c sound          1.0495465
+6 1.129070       Sad 7b7359b711c481311825da58bce2fd5c sound          1.1245125
+     voiced voiced_noSilence amEnvDep_mean amEnvDep_sd amEnvDepVoiced_mean
+1 0.5897436        0.6388889     0.1694764 0.039744747           0.1900783
+2 0.7567568        0.7567568     0.1947727 0.008821231           0.1948765
+3 0.7111111        0.7441860     0.2693977 0.067989111           0.2838915
+4 0.9782609        1.0227273     0.2020843 0.011445609           0.2020843
+5 0.5000000        0.5250000     0.1638650 0.022374763           0.1556076
+6 0.8181818        0.8571429     0.1943375 0.017672290           0.1941950
+  amEnvDepVoiced_sd amEnvFreq_mean amEnvFreq_sd amEnvFreqVoiced_mean
+1       0.034381277       71.49223   56.0677061             55.03919
+2       0.009370494       33.66478   26.2443939             32.18329
+3       0.066138998       11.64074    0.7854308             11.76193
+4       0.011445609       36.37513   43.9334760             36.37513
+5       0.012365499       12.30248    1.4713141             12.13589
+6       0.016907291       15.89533    0.8044775             15.87492
+  amEnvFreqVoiced_sd amMsFreq_mean amMsFreq_sd amMsFreqVoiced_mean
+1         51.0509816      74.37286   25.090021            66.43419
+2         25.1637049      87.25001    8.371804            87.40751
+3          0.7965515     150.42129   31.107851           163.02166
+4         43.9334760      94.58846   45.417562            94.58846
+5          1.6415916      99.15777   25.653726           105.46442
+6          0.7511898      71.59294   12.235850            70.74545
+  amMsFreqVoiced_sd amMsPurity_mean amMsPurity_sd amMsPurityVoiced_mean
+1         20.297348       -29.22888      5.829161             -28.06955
+2          9.267747       -25.31049      2.033378             -25.31680
+3         20.146452       -45.79212      6.597114             -48.82459
+4         45.417562       -35.12648     11.203621             -35.12648
+5         28.670110       -33.83774      6.584903             -36.02453
+6         11.738803       -31.88850      2.548964             -31.86642
+  amMsPurityVoiced_sd  ampl_mean    ampl_sd ampl_noSilence_mean
+1            5.240884 0.16843452 0.09725728          0.18016068
+2            2.310781 0.05228454 0.02090604          0.05228454
+3            2.492679 0.09085228 0.04531402          0.09431704
+4           11.203621 0.07849653 0.05144269          0.08117413
+5            6.684606 0.09233120 0.05174001          0.09577204
+6            2.587007 0.02792760 0.01795784          0.02902253
+  ampl_noSilence_sd amplVoiced_mean amplVoiced_sd  CPP_mean   CPP_sd dom_mean
+1        0.09178606      0.18365450    0.09668048 10.484683 2.768123 137.1028
+2        0.02090604      0.05633219    0.02110514 11.359794 2.413886 241.2822
+3        0.04329317      0.10645168    0.04114281 11.617438 2.453907 243.5300
+4        0.05099700      0.07981425    0.05123285 12.216667 2.945709 219.7823
+5        0.05058962      0.09846459    0.04430689  9.451174 3.109331 160.7418
+6        0.01763929      0.03158600    0.01741558 11.125977 2.282425 116.9334
+     dom_sd domVoiced_mean domVoiced_sd entropy_mean entropy_sd entropySh_mean
+1 20.789060       131.1300    16.057354   0.05310476 0.04344252     0.05310476
+2 68.571968       252.5829    70.413851   0.07857337 0.05389073     0.07857337
+3 52.677820       259.0120    50.603456   0.10605244 0.06118767     0.10605244
+4 51.838498       219.7823    51.838498   0.10502572 0.05141967     0.10502572
+5 49.549112       161.2844    48.360616   0.06882506 0.04765530     0.06882506
+6  6.554742       115.9110     5.868228   0.13605099 0.07700861     0.13605099
+  entropySh_sd entropyShVoiced_mean entropyShVoiced_sd entropyVoiced_mean
+1   0.04344252           0.06110485         0.05347113         0.06110485
+2   0.05389073           0.07733206         0.05994146         0.07733206
+3   0.06118767           0.09802900         0.04218878         0.09802900
+4   0.05141967           0.10387935         0.05140280         0.10387935
+5   0.04765530           0.06413883         0.02573896         0.06413883
+6   0.07700861           0.11346918         0.04708936         0.11346918
+  entropyVoiced_sd f1_freq_mean f1_freq_sd f1_width_mean f1_width_sd
+1       0.05347113     512.0225   163.4990      218.5183   137.13173
+2       0.05994146     509.5141   279.5666      157.6108   130.20402
+3       0.04218878     720.8926   253.0086      221.8272   148.79558
+4       0.05140280     641.5130   159.9821      242.8886   142.85472
+5       0.02573896     523.0690   272.5694      142.9194    82.63216
+6       0.04708936     547.0840   365.4984      162.5903   120.17560
+  f2_freq_mean f2_freq_sd f2_width_mean f2_width_sd f3_freq_mean f3_freq_sd
+1     1329.057   304.1961      170.9844    120.3912     2436.382   499.4023
+2     1450.895   498.1282      191.8100    114.1395     3076.995  2735.4222
+3     1717.557   680.4154      262.2490    121.7254     2983.701   818.8311
+4     1488.531   400.9369      216.9763    141.7109     2697.184   513.7563
+5     1363.823   470.2360      186.8681    162.6238     2595.582   498.5033
+6     1766.034  1069.7452      272.8162    144.4808     3206.712  1087.7175
+  f3_width_mean f3_width_sd  flux_mean    flux_sd fmDep_mean   fmDep_sd
+1      248.4006    127.1470 0.06327609 0.08101057  0.3072871 0.03243179
+2      285.0257    140.0602 0.10263008 0.14744466  0.2349451 0.04998821
+3      200.9006    134.3807 0.07173043 0.09551223  0.3733618 0.08919440
+4      210.8261    123.4719 0.05246928 0.09725465  0.5001032 0.18359052
+5      223.4186    141.4908 0.11301185 0.13923601  1.0172892 0.38970247
+6      381.2534    126.7240 0.09242755 0.11992279  0.2463575 0.19071205
+  fmFreq_mean fmFreq_sd fmPurity_mean fmPurity_sd harmEnergy_mean harmEnergy_sd
+1    6.669691 0.0000000            NA          NA        8.648823      3.040962
+2    6.669691 0.0000000            NA          NA       10.510306      1.767654
+3    6.247725 0.3161732            NA          NA        7.245715      2.284155
+4    5.457020 0.0000000            NA          NA        7.505331      2.340032
+5    6.002722 0.0000000            NA          NA        6.116462      5.138600
+6    7.044614 0.9728539            NA          NA        5.899081      1.826964
+  harmHeight_mean harmHeight_sd  HNR_mean   HNR_sd HNRVoiced_mean HNRVoiced_sd
+1        1824.864     1239.7516  7.370900 3.341557       7.370900     3.341557
+2        1122.008      519.2881  8.452562 3.011443       8.452562     3.011443
+3        2947.251     1383.8150  9.192272 4.222816       9.192272     4.222816
+4        2902.463     2075.2860 11.411364 4.702714      11.411364     4.702714
+5        1340.393      962.2178  7.265751 2.446924       7.265751     2.446924
+6        1642.874     1027.9616 10.236111 3.491130      10.236111     3.491130
+  loudness_mean loudness_sd loudnessVoiced_mean loudnessVoiced_sd novelty_mean
+1     13.198637    5.661738           13.437572          5.667753    0.2382058
+2      5.248221    1.407996            5.611404          1.265702    0.2022921
+3      9.211309    3.226506           10.276241          2.944243    0.2310287
+4      9.333324    3.598820            9.446685          3.555459    0.2543424
+5      9.502658    4.483964            9.852200          4.345604    0.1937174
+6      3.457799    1.526887            3.710128          1.451856    0.1632726
+  novelty_sd noveltyVoiced_mean noveltyVoiced_sd peakFreq_mean peakFreq_sd
+1 0.13864945          0.2695011       0.14352965      430.7509    263.9155
+2 0.12302792          0.1687363       0.11259708      278.5047    141.0430
+3 0.09021925          0.2349490       0.08534745      602.5989    309.4009
+4 0.07328431          0.2524425       0.07295776      451.1137    531.9424
+5 0.12156085          0.2090781       0.13105752      436.6980    324.9159
+6 0.12689520          0.1555843       0.11941442      197.7087    122.1671
+  peakFreqVoiced_mean peakFreqVoiced_sd pitch_mean  pitch_sd quartile25_mean
+1            330.5847          189.9061  132.66760 15.888255        375.7260
+2            300.1361          143.6696   89.15728  9.599553        261.1995
+3            692.8142          299.5007  260.01141 50.122066        492.7816
+4            451.1137          531.9424  220.00266 50.670449        483.4010
+5            381.1252          273.2888  179.89215 87.176346        343.6559
+6            196.2001          124.8943  116.18305  5.918873        243.9201
+  quartile25_sd quartile25Voiced_mean quartile25Voiced_sd quartile50_mean
+1     142.38101              306.2258           116.58376        713.6570
+2      67.18633              270.8371            62.20648        544.0305
+3     191.47392              522.1118           183.76324        872.9540
+4     396.44006              483.4010           396.44006        923.1459
+5     154.98217              311.5699           145.47181        593.7693
+6     150.65988              213.4301            69.47830        561.2069
+  quartile50_sd quartile50Voiced_mean quartile50Voiced_sd quartile75_mean
+1      314.4127              586.3529           287.46513        1584.608
+2      390.0155              565.2564           412.60996        1276.254
+3      481.0116              811.6181           271.17529        1808.727
+4      697.3210              923.1459           697.32101        1783.536
+5      311.3139              490.6987           225.98910        1181.036
+6      619.5008              418.5231            95.82595        1204.356
+  quartile75_sd quartile75Voiced_mean quartile75Voiced_sd roughness_mean
+1      873.8501             1605.0758           1046.4358       34.52804
+2     1321.5766             1386.3430           1481.9814       32.15452
+3     1193.1544             1640.1188            648.1188       31.17487
+4     1053.0013             1783.5361           1053.0013       28.44054
+5      802.4188             1103.3575            620.7744       34.64471
+6     1210.3724              940.4265            535.7054       32.92371
+  roughness_sd roughnessVoiced_mean roughnessVoiced_sd specCentroid_mean
+1     1.283554             33.79016          0.5996293          1278.248
+2     2.746244             32.25332          2.9262655          1250.525
+3     2.866969             29.90684          1.3386861          1788.697
+4     3.069740             28.44054          3.0697395          1776.159
+5     4.594289             32.71388          1.5383361          1230.086
+6     3.707314             32.53400          3.6293011          1601.424
+  specCentroid_sd specCentroidVoiced_mean specCentroidVoiced_sd specSlope_mean
+1        484.4401                1304.096              593.3259      -2.410800
+2        657.5594                1271.917              727.0110      -1.824296
+3        712.2695                1744.793              433.0936      -2.034389
+4        696.6916                1776.159              696.6916      -1.935525
+5        464.0407                1196.945              248.1587      -1.945499
+6        770.2134                1424.577              443.7607      -1.411828
+  specSlope_sd specSlopeVoiced_mean specSlopeVoiced_sd subDep_mean  subDep_sd
+1    0.3266855            -2.340713          0.3387360  0.05030737 0.06273762
+2    0.2097264            -1.879303          0.1688640  0.01106516 0.02557661
+3    0.2444092            -2.062324          0.2710522  0.07627140 0.10705006
+4    0.2031865            -1.935525          0.2031865  0.06178949 0.08696804
+5    0.3972763            -1.933199          0.4273278  0.09248900 0.10637959
+6    0.2713370            -1.406189          0.2491906  0.03216622 0.05288332
+  subRatio_mean subRatio_sd
+1      2.687500   0.6020797
+2      2.000000   0.0000000
+3      3.500000   1.1401754
+4      3.027027   0.9570350
+5      2.937500   1.0626225
+6      2.157895   0.3746343</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run autoReport to generate a report get a full summary</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note though that you need to set extended = FALSE as we don't run the report on all 100+ features. The report appears in your working directory.</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#autoReport(voiceR_feats)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -1144,53 +1416,53 @@ Discussion
 <h3 class="anchored" data-anchor-id="modeling-speaker-emotion">Modeling Speaker Emotion</h3>
 <p>Using the <code>voiceR_feats</code> data frame extracted above: - Inspect the <code>Condition</code> column (automatically parsed from the filenames by <code>autoExtract()</code>). - Perform a t-test to check if average pitch (<code>mean_F0</code>) differs significantly between happy and sad speech. - Fit a logistic regression model in R to predict speaker emotion (<code>Condition</code>) from your acoustic features (e.g., <code>mean_F0</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Inspect the automatically extracted Condition column</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(voiceR_feats<span class="sc">$</span>Condition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Inspect the automatically extracted Condition column</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(voiceR_feats<span class="sc">$</span>Condition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Happy   Sad 
    10    10 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. t-test for pitch (F0 mean)</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mean_F0 <span class="sc">~</span> Condition, <span class="at">data =</span> voiceR_feats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. t-test for pitch (F0 mean)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(amplVoiced_mean <span class="sc">~</span> Condition, <span class="at">data =</span> voiceR_feats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
 
-data:  mean_F0 by Condition
-t = 2.7492, df = 15.645, p-value = 0.01448
+data:  amplVoiced_mean by Condition
+t = 2.8916, df = 15.315, p-value = 0.011
 alternative hypothesis: true difference in means between group Happy and group Sad is not equal to 0
 95 percent confidence interval:
-  14.87125 115.87816
+ 0.01144849 0.07521732
 sample estimates:
 mean in group Happy   mean in group Sad 
-           213.9390            148.5643 </code></pre>
+         0.10769845          0.06436555 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit predictive model</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">as.factor</span>(Condition) <span class="sc">~</span> mean_F0 <span class="sc">+</span> mean_loudness <span class="sc">+</span> duration , <span class="at">data =</span> voiceR_feats, <span class="at">family =</span> binomial)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit predictive model</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">as.factor</span>(Condition) <span class="sc">~</span> pitch_mean <span class="sc">+</span> amplVoiced_mean <span class="sc">+</span> duration , <span class="at">data =</span> voiceR_feats, <span class="at">family =</span> binomial)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-glm(formula = as.factor(Condition) ~ mean_F0 + mean_loudness + 
+glm(formula = as.factor(Condition) ~ pitch_mean + amplVoiced_mean + 
     duration, family = binomial, data = voiceR_feats)
 
 Coefficients:
-              Estimate Std. Error z value Pr(&gt;|z|)  
-(Intercept)    9.40878    8.00305   1.176   0.2397  
-mean_F0       -0.04195    0.02561  -1.638   0.1015  
-mean_loudness -0.63253    0.31778  -1.990   0.0465 *
-duration       3.23538    5.50217   0.588   0.5565  
+                 Estimate Std. Error z value Pr(&gt;|z|)  
+(Intercept)      14.72511   10.95025   1.345   0.1787  
+pitch_mean       -0.06769    0.03929  -1.723   0.0849 .
+amplVoiced_mean -82.89406   46.82076  -1.770   0.0767 .
+duration          4.42075    6.79576   0.651   0.5154  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 27.726  on 19  degrees of freedom
-Residual deviance: 13.388  on 16  degrees of freedom
-AIC: 21.388
+Residual deviance: 10.244  on 16  degrees of freedom
+AIC: 18.244
 
-Number of Fisher Scoring iterations: 6</code></pre>
+Number of Fisher Scoring iterations: 7</code></pre>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -1281,39 +1553,51 @@ Important
 <h3 class="anchored" data-anchor-id="transcription-via-openais-whisper-api-in-r">Transcription via OpenAI’s Whisper API in R</h3>
 <p>We use the <code>openai</code> package to call the API (make sure to add your own API key as discussed in class).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openai)</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set API key</span></span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">OPENAI_API_KEY =</span> <span class="st">"YOUR-API-KEY"</span>)</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transcribe command file</span></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>transcript <span class="ot">&lt;-</span> <span class="fu">create_transcription</span>(</span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>,</span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"whisper-1"</span></span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print transcription</span></span>
-<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Transcription:"</span>, transcript<span class="sc">$</span>text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openai)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set API key</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Sys.setenv(OPENAI_API_KEY = "YOUR-OPENAI-KEY")</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transcribe file</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>transcr_sensitive <span class="ot">&lt;-</span> <span class="fu">create_transcription</span>(</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">"voiceData/6_sensitive/sens.wav"</span>,</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"whisper-1"</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>transcr_obama <span class="ot">&lt;-</span> <span class="fu">create_transcription</span>(</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">"voiceData/3_obama_short/obama.srt.wav"</span>,</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"whisper-1"</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Print transcription</span></span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>transcr_sensitive<span class="sc">$</span>text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "None, because I got married before I had sex and I've had no other partners, so I've never had that problem."</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>transcr_obama<span class="sc">$</span>text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Good evening. Tonight, I can report to the American people and to the world that the United States has conducted an operation that killed Osama bin Laden, the leader of Al Qaeda, and a terrorist who's responsible"</code></pre>
+</div>
 </div>
 </section>
 <section id="transcription-via-google-cloud-speech-to-text-in-r" class="level3">
 <h3 class="anchored" data-anchor-id="transcription-via-google-cloud-speech-to-text-in-r">Transcription via Google Cloud Speech-to-Text in R</h3>
 <p>The <code>googleLanguageR</code> package offers direct bindings to Google Cloud’s Language APIs. If you already have an OpenAI account, I suggest plugging in your API key and go with the <code>openai</code> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googleLanguageR)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate using Google Cloud Service Account JSON</span></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="fu">gl_auth</span>(<span class="st">"path_to_service_account_credentials.json"</span>)</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transcribe audio file</span></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>speech_result <span class="ot">&lt;-</span> <span class="fu">gl_speech</span>(</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>,</span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampleRateHertz =</span> <span class="dv">16000</span>,</span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">languageCode =</span> <span class="st">"en-US"</span></span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
-<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>speech_result<span class="sc">$</span>transcript</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googleLanguageR)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate using Google Cloud Service Account JSON</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">gl_auth</span>(<span class="st">"path_to_service_account_credentials.json"</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Transcribe audio file</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>speech_result <span class="ot">&lt;-</span> <span class="fu">gl_speech</span>(</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span>,</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sampleRateHertz =</span> <span class="dv">16000</span>,</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">languageCode =</span> <span class="st">"en-US"</span></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a><span class="co"># View results</span></span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>speech_result<span class="sc">$</span>transcript</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
@@ -1324,23 +1608,23 @@ Important
 <h3 class="anchored" data-anchor-id="audio-embeddings-with-talk">Audio Embeddings with <code>talk</code></h3>
 <p>Acoustic feature extraction measures specific dimensions. In contrast, <strong>voice embeddings</strong> represent the entire acoustic style and speaker profile in a high-dimensional vector. We can use the <code>talk</code> package to generate these embeddings, and then plug them into a linear PCA or non-linear t-SNE for dimension reduction. Note that the same logic applies as in other dimension reduction settings, i.e.&nbsp;we have to define ourselves what those dimensions and vectors mean.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(talk)</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup talk R environment dependencies (run once on setup)</span></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co"># talkrpp_install()</span></span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co"># talkrpp_initialize(save_profile = TRUE)</span></span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate embeddings for an audio file</span></span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>wav_path <span class="ot">&lt;-</span> <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span></span>
-<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>emb <span class="ot">&lt;-</span> <span class="fu">talkEmbed</span>(wav_path)</span>
-<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a><span class="co"># View dimensions</span></span>
-<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(emb)</span>
-<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(talk)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup talk R environment dependencies (run once on setup)</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co"># talkrpp_install()</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co"># talkrpp_initialize(save_profile = TRUE)</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate embeddings for an audio file</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>wav_path <span class="ot">&lt;-</span> <span class="st">"voiceData/1_alexa/alexa_cmd1.wav"</span></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>emb <span class="ot">&lt;-</span> <span class="fu">talkEmbed</span>(wav_path)</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="co"># View dimensions</span></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(emb)</span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(emb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s revise our code to extract the embeddings for all files of the <code>I go to the bar</code>corpus.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(talk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(talk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>[0;34mThis is talk. (version 0.30).
 [0m[0;32mNewer versions may have improved functions and updated defaults to reflect current understandings of the state-of-the-art.[0m[0;35m
@@ -1363,7 +1647,7 @@ Successfully initialized talk required python packages.
  type = "talkrpp_condaenv", 
  name = "talkrpp_condaenv".[0m</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'foreach'</code></pre>
@@ -1373,92 +1657,92 @@ Attaching package: 'foreach'</code></pre>
 
     accumulate, when</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: iterators</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: parallel</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Define paths</span></span>
-<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>emo_dir <span class="ot">&lt;-</span> <span class="st">"voiceData/7_BRM_paper_data/"</span></span>
-<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Absolute path fallback:</span></span>
-<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a><span class="co"># emo_dir &lt;- "/Users/childebrand/Dropbox/2_Teaching/2026_FS/1_GSERM_ESADE/voiceData/7_BRM_paper_data/"</span></span>
-<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>emo_files_paths <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a>emo_files_names <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">full.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Setup the parallel cluster (outfile = "" redirects stdout/stderr)</span></span>
-<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>num_cores <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="dv">9</span>, parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(num_cores, <span class="at">outfile =</span> <span class="st">""</span>) </span>
-<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
-<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Spawning parallel cluster with"</span>, num_cores, <span class="st">"cores. Please wait...</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Define paths</span></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>emo_dir <span class="ot">&lt;-</span> <span class="st">"voiceData/7_BRM_paper_data/"</span></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Absolute path fallback:</span></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="co"># emo_dir &lt;- "/Users/childebrand/Dropbox/2_Teaching/2026_FS/1_GSERM_ESADE/voiceData/7_BRM_paper_data/"</span></span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>emo_files_paths <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>emo_files_names <span class="ot">&lt;-</span> <span class="fu">list.files</span>(emo_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="at">full.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Setup the parallel cluster (outfile = "" redirects stdout/stderr)</span></span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>num_cores <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="dv">9</span>, parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(num_cores, <span class="at">outfile =</span> <span class="st">""</span>) </span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Spawning parallel cluster with"</span>, num_cores, <span class="st">"cores. Please wait...</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Spawning parallel cluster with 9 cores. Please wait...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Run the extraction in parallel (we removed the .packages argument)</span></span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>embeddings_list <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">i =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(emo_files_paths), </span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">.errorhandling =</span> <span class="st">"remove"</span>) <span class="sc">%dopar%</span> {</span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Load packages silently inside each worker process ---</span></span>
-<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(talk))</span>
-<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(reticulate))</span>
-<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> emo_files_paths[i]</span>
-<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> emo_files_names[i]</span>
-<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Suppress Python/HuggingFace warnings ---</span></span>
-<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">try</span>({</span>
-<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">py_run_string</span>(<span class="st">"</span></span>
-<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a><span class="st">import warnings</span></span>
-<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a><span class="st">warnings.filterwarnings('ignore') # Ignore general Python warnings</span></span>
-<span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a><span class="st">import transformers</span></span>
-<span id="cb71-18"><a href="#cb71-18" aria-hidden="true" tabindex="-1"></a><span class="st">transformers.logging.set_verbosity_error() # Suppress HuggingFace info/warnings</span></span>
-<span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
-<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print the active file to the console in real-time</span></span>
-<span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"[%d/%d] Analyzing: %s</span><span class="sc">\n</span><span class="st">"</span>, i, <span class="fu">length</span>(emo_files_paths), file_name))</span>
-<span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-25"><a href="#cb71-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the embedding</span></span>
-<span id="cb71-26"><a href="#cb71-26" aria-hidden="true" tabindex="-1"></a>  emb <span class="ot">&lt;-</span> talk<span class="sc">::</span><span class="fu">talkEmbed</span>(file_path)</span>
-<span id="cb71-27"><a href="#cb71-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-28"><a href="#cb71-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse speaker ID and emotion condition from the filename (e.g., "10_Happy_Bar")</span></span>
-<span id="cb71-29"><a href="#cb71-29" aria-hidden="true" tabindex="-1"></a>  name_clean <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="st">""</span>, file_name)</span>
-<span id="cb71-30"><a href="#cb71-30" aria-hidden="true" tabindex="-1"></a>  filename_components <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(name_clean, <span class="st">"_"</span>)[[<span class="dv">1</span>]]</span>
-<span id="cb71-31"><a href="#cb71-31" aria-hidden="true" tabindex="-1"></a>  user_id <span class="ot">&lt;-</span> filename_components[<span class="dv">1</span>]</span>
-<span id="cb71-32"><a href="#cb71-32" aria-hidden="true" tabindex="-1"></a>  emotion <span class="ot">&lt;-</span> filename_components[<span class="dv">2</span>]</span>
-<span id="cb71-33"><a href="#cb71-33" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-34"><a href="#cb71-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the metadata columns data frame</span></span>
-<span id="cb71-35"><a href="#cb71-35" aria-hidden="true" tabindex="-1"></a>  metadata_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb71-36"><a href="#cb71-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">file_name =</span> file_name,</span>
-<span id="cb71-37"><a href="#cb71-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">user_id =</span> user_id,</span>
-<span id="cb71-38"><a href="#cb71-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">emotion =</span> emotion,</span>
-<span id="cb71-39"><a href="#cb71-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb71-40"><a href="#cb71-40" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb71-41"><a href="#cb71-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-42"><a href="#cb71-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine metadata and embeddings (placing metadata at the FRONT/left-most side)</span></span>
-<span id="cb71-43"><a href="#cb71-43" aria-hidden="true" tabindex="-1"></a>  emb_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(metadata_df, <span class="fu">as.data.frame</span>(emb))</span>
-<span id="cb71-44"><a href="#cb71-44" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb71-45"><a href="#cb71-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(emb_df)</span>
-<span id="cb71-46"><a href="#cb71-46" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb71-47"><a href="#cb71-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-48"><a href="#cb71-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. CRITICAL: Stop cluster to free up memory</span></span>
-<span id="cb71-49"><a href="#cb71-49" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span>
-<span id="cb71-50"><a href="#cb71-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Extraction complete! Cluster closed.</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Run the extraction in parallel (we removed the .packages argument)</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>embeddings_list <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">i =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(emo_files_paths), </span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">.errorhandling =</span> <span class="st">"remove"</span>) <span class="sc">%dopar%</span> {</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Load packages silently inside each worker process ---</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(talk))</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(reticulate))</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> emo_files_paths[i]</span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> emo_files_names[i]</span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># --- Suppress Python/HuggingFace warnings ---</span></span>
+<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">try</span>({</span>
+<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">py_run_string</span>(<span class="st">"</span></span>
+<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a><span class="st">import warnings</span></span>
+<span id="cb76-16"><a href="#cb76-16" aria-hidden="true" tabindex="-1"></a><span class="st">warnings.filterwarnings('ignore') # Ignore general Python warnings</span></span>
+<span id="cb76-17"><a href="#cb76-17" aria-hidden="true" tabindex="-1"></a><span class="st">import transformers</span></span>
+<span id="cb76-18"><a href="#cb76-18" aria-hidden="true" tabindex="-1"></a><span class="st">transformers.logging.set_verbosity_error() # Suppress HuggingFace info/warnings</span></span>
+<span id="cb76-19"><a href="#cb76-19" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb76-20"><a href="#cb76-20" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb76-21"><a href="#cb76-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-22"><a href="#cb76-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print the active file to the console in real-time</span></span>
+<span id="cb76-23"><a href="#cb76-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"[%d/%d] Analyzing: %s</span><span class="sc">\n</span><span class="st">"</span>, i, <span class="fu">length</span>(emo_files_paths), file_name))</span>
+<span id="cb76-24"><a href="#cb76-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-25"><a href="#cb76-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the embedding</span></span>
+<span id="cb76-26"><a href="#cb76-26" aria-hidden="true" tabindex="-1"></a>  emb <span class="ot">&lt;-</span> talk<span class="sc">::</span><span class="fu">talkEmbed</span>(file_path)</span>
+<span id="cb76-27"><a href="#cb76-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-28"><a href="#cb76-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse speaker ID and emotion condition from the filename (e.g., "10_Happy_Bar")</span></span>
+<span id="cb76-29"><a href="#cb76-29" aria-hidden="true" tabindex="-1"></a>  name_clean <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.wav$"</span>, <span class="st">""</span>, file_name)</span>
+<span id="cb76-30"><a href="#cb76-30" aria-hidden="true" tabindex="-1"></a>  filename_components <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(name_clean, <span class="st">"_"</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb76-31"><a href="#cb76-31" aria-hidden="true" tabindex="-1"></a>  user_id <span class="ot">&lt;-</span> filename_components[<span class="dv">1</span>]</span>
+<span id="cb76-32"><a href="#cb76-32" aria-hidden="true" tabindex="-1"></a>  emotion <span class="ot">&lt;-</span> filename_components[<span class="dv">2</span>]</span>
+<span id="cb76-33"><a href="#cb76-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-34"><a href="#cb76-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the metadata columns data frame</span></span>
+<span id="cb76-35"><a href="#cb76-35" aria-hidden="true" tabindex="-1"></a>  metadata_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb76-36"><a href="#cb76-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">file_name =</span> file_name,</span>
+<span id="cb76-37"><a href="#cb76-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">user_id =</span> user_id,</span>
+<span id="cb76-38"><a href="#cb76-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">emotion =</span> emotion,</span>
+<span id="cb76-39"><a href="#cb76-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb76-40"><a href="#cb76-40" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb76-41"><a href="#cb76-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-42"><a href="#cb76-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine metadata and embeddings (placing metadata at the FRONT/left-most side)</span></span>
+<span id="cb76-43"><a href="#cb76-43" aria-hidden="true" tabindex="-1"></a>  emb_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(metadata_df, <span class="fu">as.data.frame</span>(emb))</span>
+<span id="cb76-44"><a href="#cb76-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb76-45"><a href="#cb76-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(emb_df)</span>
+<span id="cb76-46"><a href="#cb76-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb76-47"><a href="#cb76-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-48"><a href="#cb76-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. CRITICAL: Stop cluster to free up memory</span></span>
+<span id="cb76-49"><a href="#cb76-49" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span>
+<span id="cb76-50"><a href="#cb76-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Extraction complete! Cluster closed.</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Extraction complete! Cluster closed.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Bind all rows</span></span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>combined_embeddings <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(embeddings_list, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Verify that metadata columns are at the front</span></span>
-<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(combined_embeddings[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Bind all rows</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>combined_embeddings <span class="ot">&lt;-</span> <span class="fu">rbindlist</span>(embeddings_list, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Verify that metadata columns are at the front</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(combined_embeddings[, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                        file_name
                                            &lt;char&gt;
@@ -1487,49 +1771,49 @@ Extraction complete! Cluster closed.</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>reshape_attempt <span class="ot">&lt;-</span> combined_embeddings <span class="sc">|&gt;</span></span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">condition =</span> emotion)</span>
-<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Prepare numeric data for PCA (exclude metadata AND ungroup)</span></span>
-<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>pca_input <span class="ot">&lt;-</span> reshape_attempt <span class="sc">|&gt;</span> <span class="co">#reshape_attempt</span></span>
-<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Dim"</span>))</span>
-<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run PCA</span></span>
-<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a>pca_output <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(pca_input, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-13"><a href="#cb75-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create a data frame for visualization and stats</span></span>
-<span id="cb75-14"><a href="#cb75-14" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(pca_output<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]) <span class="sc">|&gt;</span></span>
-<span id="cb75-15"><a href="#cb75-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(reshape_attempt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition))</span>
-<span id="cb75-16"><a href="#cb75-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-17"><a href="#cb75-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Calculate variance explained</span></span>
-<span id="cb75-18"><a href="#cb75-18" aria-hidden="true" tabindex="-1"></a>var_explained <span class="ot">&lt;-</span> pca_output<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_output<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb75-19"><a href="#cb75-19" aria-hidden="true" tabindex="-1"></a>pc1_var <span class="ot">&lt;-</span> var_explained[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb75-20"><a href="#cb75-20" aria-hidden="true" tabindex="-1"></a>pc2_var <span class="ot">&lt;-</span> var_explained[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb75-21"><a href="#cb75-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-22"><a href="#cb75-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Statistical Check: Does 'condition' explain the variance in PC1 or PC2?</span></span>
-<span id="cb75-23"><a href="#cb75-23" aria-hidden="true" tabindex="-1"></a>anova_pc1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">aov</span>(PC1 <span class="sc">~</span> condition, <span class="at">data =</span> pca_df))</span>
-<span id="cb75-24"><a href="#cb75-24" aria-hidden="true" tabindex="-1"></a>anova_pc2 <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">aov</span>(PC2 <span class="sc">~</span> condition, <span class="at">data =</span> pca_df))</span>
-<span id="cb75-25"><a href="#cb75-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-26"><a href="#cb75-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Print findings</span></span>
-<span id="cb75-27"><a href="#cb75-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"--- PCA Variance Explained ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>reshape_attempt <span class="ot">&lt;-</span> combined_embeddings <span class="sc">|&gt;</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">condition =</span> emotion)</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Prepare numeric data for PCA (exclude metadata AND ungroup)</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>pca_input <span class="ot">&lt;-</span> reshape_attempt <span class="sc">|&gt;</span> <span class="co">#reshape_attempt</span></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Dim"</span>))</span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run PCA</span></span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a>pca_output <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(pca_input, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create a data frame for visualization and stats</span></span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(pca_output<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(reshape_attempt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition))</span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Calculate variance explained</span></span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>var_explained <span class="ot">&lt;-</span> pca_output<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_output<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a>pc1_var <span class="ot">&lt;-</span> var_explained[<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb80-20"><a href="#cb80-20" aria-hidden="true" tabindex="-1"></a>pc2_var <span class="ot">&lt;-</span> var_explained[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb80-21"><a href="#cb80-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-22"><a href="#cb80-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Statistical Check: Does 'condition' explain the variance in PC1 or PC2?</span></span>
+<span id="cb80-23"><a href="#cb80-23" aria-hidden="true" tabindex="-1"></a>anova_pc1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">aov</span>(PC1 <span class="sc">~</span> condition, <span class="at">data =</span> pca_df))</span>
+<span id="cb80-24"><a href="#cb80-24" aria-hidden="true" tabindex="-1"></a>anova_pc2 <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">aov</span>(PC2 <span class="sc">~</span> condition, <span class="at">data =</span> pca_df))</span>
+<span id="cb80-25"><a href="#cb80-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-26"><a href="#cb80-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Print findings</span></span>
+<span id="cb80-27"><a href="#cb80-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"--- PCA Variance Explained ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>--- PCA Variance Explained ---</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"PC1: %.2f%%</span><span class="sc">\n</span><span class="st">"</span>, pc1_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"PC1: %.2f%%</span><span class="sc">\n</span><span class="st">"</span>, pc1_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>PC1: 31.15%</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"PC2: %.2f%%</span><span class="sc">\n\n</span><span class="st">"</span>, pc2_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"PC2: %.2f%%</span><span class="sc">\n\n</span><span class="st">"</span>, pc2_var))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>PC2: 12.65%</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"--- ANOVA: Condition effect on PC1 ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"--- ANOVA: Condition effect on PC1 ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>--- ANOVA: Condition effect on PC1 ---</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_pc1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_pc1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)  
 condition    1    985   985.5   4.983 0.0385 *
@@ -1537,75 +1821,75 @@ Residuals   18   3560   197.8
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">--- ANOVA: Condition effect on PC2 ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">--- ANOVA: Condition effect on PC2 ---</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 --- ANOVA: Condition effect on PC2 ---</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_pc2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_pc2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
 condition    1      8    8.04   0.079  0.782
 Residuals   18   1837  102.07               </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Generate the plot</span></span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
-<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"PCA of Voice Embeddings"</span>,</span>
-<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"PC1: "</span>, <span class="fu">round</span>(pc1_var, <span class="dv">1</span>), <span class="st">"% | PC2: "</span>, <span class="fu">round</span>(pc2_var, <span class="dv">1</span>), <span class="st">"% variance explained"</span>),</span>
-<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">paste0</span>(<span class="st">"PC1 ("</span>, <span class="fu">round</span>(pc1_var, <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
-<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">paste0</span>(<span class="st">"PC2 ("</span>, <span class="fu">round</span>(pc2_var, <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
-<span id="cb89-10"><a href="#cb89-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Condition"</span></span>
-<span id="cb89-11"><a href="#cb89-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb89-12"><a href="#cb89-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Generate the plot</span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"PCA of Voice Embeddings"</span>,</span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"PC1: "</span>, <span class="fu">round</span>(pc1_var, <span class="dv">1</span>), <span class="st">"% | PC2: "</span>, <span class="fu">round</span>(pc2_var, <span class="dv">1</span>), <span class="st">"% variance explained"</span>),</span>
+<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">paste0</span>(<span class="st">"PC1 ("</span>, <span class="fu">round</span>(pc1_var, <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
+<span id="cb94-9"><a href="#cb94-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">paste0</span>(<span class="st">"PC2 ("</span>, <span class="fu">round</span>(pc2_var, <span class="dv">1</span>), <span class="st">"%)"</span>),</span>
+<span id="cb94-10"><a href="#cb94-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Condition"</span></span>
+<span id="cb94-11"><a href="#cb94-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb94-12"><a href="#cb94-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtsne)</span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prepare numeric matrix (removing grouping)</span></span>
-<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>tsne_input <span class="ot">&lt;-</span> reshape_attempt <span class="sc">|&gt;</span> </span>
-<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Dim"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb90-8"><a href="#cb90-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
-<span id="cb90-9"><a href="#cb90-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-10"><a href="#cb90-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run t-SNE</span></span>
-<span id="cb90-11"><a href="#cb90-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: With only 20 observations, perplexity must be low (typically &lt; N/3).</span></span>
-<span id="cb90-12"><a href="#cb90-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll use perplexity = 5.</span></span>
-<span id="cb90-13"><a href="#cb90-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">777</span>) <span class="co"># For reproducibility</span></span>
-<span id="cb90-14"><a href="#cb90-14" aria-hidden="true" tabindex="-1"></a>tsne_out <span class="ot">&lt;-</span> <span class="fu">Rtsne</span>(tsne_input, </span>
-<span id="cb90-15"><a href="#cb90-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">perplexity =</span> <span class="dv">5</span>, </span>
-<span id="cb90-16"><a href="#cb90-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dims =</span> <span class="dv">2</span>, </span>
-<span id="cb90-17"><a href="#cb90-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">check_duplicates =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb90-18"><a href="#cb90-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-19"><a href="#cb90-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create plotting dataframe</span></span>
-<span id="cb90-20"><a href="#cb90-20" aria-hidden="true" tabindex="-1"></a>tsne_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(tsne_out<span class="sc">$</span>Y) <span class="sc">|&gt;</span></span>
-<span id="cb90-21"><a href="#cb90-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">tsne1 =</span> V1, <span class="at">tsne2 =</span> V2) <span class="sc">|&gt;</span></span>
-<span id="cb90-22"><a href="#cb90-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(reshape_attempt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtsne)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prepare numeric matrix (removing grouping)</span></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>tsne_input <span class="ot">&lt;-</span> reshape_attempt <span class="sc">|&gt;</span> </span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Dim"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run t-SNE</span></span>
+<span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: With only 20 observations, perplexity must be low (typically &lt; N/3).</span></span>
+<span id="cb95-12"><a href="#cb95-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll use perplexity = 5.</span></span>
+<span id="cb95-13"><a href="#cb95-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">777</span>) <span class="co"># For reproducibility</span></span>
+<span id="cb95-14"><a href="#cb95-14" aria-hidden="true" tabindex="-1"></a>tsne_out <span class="ot">&lt;-</span> <span class="fu">Rtsne</span>(tsne_input, </span>
+<span id="cb95-15"><a href="#cb95-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">perplexity =</span> <span class="dv">5</span>, </span>
+<span id="cb95-16"><a href="#cb95-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dims =</span> <span class="dv">2</span>, </span>
+<span id="cb95-17"><a href="#cb95-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">check_duplicates =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb95-18"><a href="#cb95-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-19"><a href="#cb95-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Create plotting dataframe</span></span>
+<span id="cb95-20"><a href="#cb95-20" aria-hidden="true" tabindex="-1"></a>tsne_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(tsne_out<span class="sc">$</span>Y) <span class="sc">|&gt;</span></span>
+<span id="cb95-21"><a href="#cb95-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">tsne1 =</span> V1, <span class="at">tsne2 =</span> V2) <span class="sc">|&gt;</span></span>
+<span id="cb95-22"><a href="#cb95-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(reshape_attempt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if
 `.name_repair` is omitted as of tibble 2.0.0.
 ℹ Using compatibility `.name_repair`.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Visualize</span></span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tsne_df, <span class="fu">aes</span>(<span class="at">x =</span> tsne1, <span class="at">y =</span> tsne2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
-<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"t-SNE of Voice Embeddings"</span>,</span>
-<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Perplexity = 5 (adjusted for small N)"</span>,</span>
-<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"t-SNE 1"</span>,</span>
-<span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"t-SNE 2"</span>,</span>
-<span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Condition"</span></span>
-<span id="cb92-11"><a href="#cb92-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb92-12"><a href="#cb92-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Visualize</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tsne_df, <span class="fu">aes</span>(<span class="at">x =</span> tsne1, <span class="at">y =</span> tsne2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"t-SNE of Voice Embeddings"</span>,</span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Perplexity = 5 (adjusted for small N)"</span>,</span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"t-SNE 1"</span>,</span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"t-SNE 2"</span>,</span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Condition"</span></span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="GSERM_voiceanalyticsWorkshop_Day1-5_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -1615,7 +1899,7 @@ Residuals   18   1837  102.07               </code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Demo_AgentGemini.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Example of an AI Agent Interface</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Simple, Vibe-Coded AI Agent Using Google Antigravity</figcaption><p></p>
 </figure>
 </div>
 <hr>
@@ -1704,7 +1988,7 @@ Design check
 <section id="session-info" class="level2">
 <h2 class="anchored" data-anchor-id="session-info">Session info</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.6.0 (2026-04-24)
 Platform: aarch64-apple-darwin23
@@ -1771,24 +2055,24 @@ loaded via a namespace (and not attached):
  [94] carData_3.0-6        multcompView_0.1-11  scales_1.4.0        
  [97] kableExtra_1.4.0     lmom_3.3             png_0.1-9           
 [100] gower_1.0.2          knitr_1.51           rstudioapi_0.18.0   
-[103] tzdb_0.5.0           reshape2_1.4.5       nlme_3.1-169        
-[106] proxy_0.4-29         cachem_1.1.0         zoo_1.8-15          
-[109] rsample_1.3.2        rootSolve_1.8.2.4    libcoin_1.0-13      
-[112] pillar_1.11.1        grid_4.6.0           vctrs_0.7.3         
-[115] tune_2.1.0           promises_1.5.0       ggpubr_0.6.3        
-[118] car_3.1-5            shinyFiles_0.9.3     xtable_1.8-8        
-[121] yardstick_1.4.0      evaluate_1.0.5       phia_0.3-2          
-[124] mvtnorm_1.4-1        cli_3.6.6            compiler_4.6.0      
-[127] rlang_1.2.0          future.apply_1.20.2  ggsignif_0.6.4      
-[130] labeling_0.4.3       plyr_1.8.9           fs_2.1.0            
-[133] stringi_1.8.7        topics_1.0           viridisLite_0.4.3   
-[136] assertthat_0.2.1     lazyeval_0.2.3       rcompanion_2.5.2    
-[139] Matrix_1.7-5         patchwork_1.3.2      hms_1.1.4           
-[142] future_1.70.0        shiny_1.13.0         haven_2.5.5         
-[145] googleAuthR_2.0.2.1  gridtext_0.1.6       gargle_1.6.1        
-[148] FSA_0.10.1           broom_1.0.13         memoise_2.0.1       
-[151] bslib_0.11.0         fastmatch_1.1-8      readxl_1.5.0        
-[154] DiceDesign_1.10     </code></pre>
+[103] tzdb_0.5.0           reshape2_1.4.5       curl_7.1.0          
+[106] nlme_3.1-169         proxy_0.4-29         cachem_1.1.0        
+[109] zoo_1.8-15           rsample_1.3.2        rootSolve_1.8.2.4   
+[112] libcoin_1.0-13       pillar_1.11.1        grid_4.6.0          
+[115] vctrs_0.7.3          tune_2.1.0           promises_1.5.0      
+[118] ggpubr_0.6.3         car_3.1-5            shinyFiles_0.9.3    
+[121] xtable_1.8-8         yardstick_1.4.0      evaluate_1.0.5      
+[124] phia_0.3-2           mvtnorm_1.4-1        cli_3.6.6           
+[127] compiler_4.6.0       rlang_1.2.0          future.apply_1.20.2 
+[130] ggsignif_0.6.4       labeling_0.4.3       plyr_1.8.9          
+[133] fs_2.1.0             stringi_1.8.7        topics_1.0          
+[136] viridisLite_0.4.3    assertthat_0.2.1     lazyeval_0.2.3      
+[139] rcompanion_2.5.2     Matrix_1.7-5         patchwork_1.3.2     
+[142] hms_1.1.4            future_1.70.0        shiny_1.13.0        
+[145] haven_2.5.5          googleAuthR_2.0.2.1  gridtext_0.1.6      
+[148] gargle_1.6.1         FSA_0.10.1           broom_1.0.13        
+[151] memoise_2.0.1        bslib_0.11.0         fastmatch_1.1-8     
+[154] readxl_1.5.0         DiceDesign_1.10     </code></pre>
 </div>
 </div>
 </section>
