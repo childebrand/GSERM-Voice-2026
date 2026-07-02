@@ -1,0 +1,174 @@
+---
+title: "Case Study: Does Anger Sound Different from Calmness?"
+author: "Your Group Name"
+format: 
+  html:
+    theme: flatly
+    code-background: true
+    code-copy: true
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+
+## Abstract 
+
+This case study walks you through the **complete voice analytics pipeline** from our course on a new dataset. We **read** the audio, **visualize** it, **preprocess and visualize again**, **extract features** (acoustic features, embeddings, and some combination), and finally **use those features to predict** the speaker's emotional state. The code deliberately reuses the same functions and patterns as in our `GSERM_voiceanalyticsWorkshop_Day1-5.qmd` (`readWave()`, `oscillo()`, `spectro()`, `timer()`, `voiceR::autoExtract()`, `talk::talkEmbed()`), so you can map each step back to what we did in class.
+
+We use the **RAVDESS** corpus (Livingstone & Russo, 2018), focusing on a simple arousal contrast — **Calm vs. Angry**. To keep the sentence content constant we use only the *"Kids are talking by the door"* recordings, giving a balanced **192 clips**: 24 actors × 2 emotions × 2 intensities × 2 repetitions, split evenly across sex (48 per sex × emotion cell). Every clip in the `9_ravdess_calm_angry/` folder is part of the analysis.
+
+::: {.callout-note}
+## Learning objectives
+By the end of this case study, you should be able to:
+
+1. Assemble a reproducible pipeline from raw audio to a predictive model on a multi-speaker corpus.
+2. Read, visualize, and preprocess a batch of recordings and confirm each step visually.
+3. Extract three complementary feature representations: `voiceR` acoustic features, `talk` embeddings, and their combination.
+4. Fit and evaluate models with a **speaker-independent** train/test split, and read which features drive the prediction.
+5. Discuss potential construct-validity and fairness issues before trusting the result.
+:::
+
+# Overview
+
+Our question of this case is whether we separate calm from angry speech. The arousal account predicts anger raises pitch, loudness, and pitch variability and degrades voice quality (lower harmonics-to-noise ratio). As before, we simply follow the same steps as prevously: **read → visualize → preprocess → extract → predict**.
+
+```{r setup, message=FALSE, warning=FALSE}
+# Acoustics & audio (same core stack as in our GSERM workshop)
+library(tuneR)
+library(seewave)
+library(soundgen)
+library(voiceR)
+
+# Data wrangling, modelling & validation
+library(tidyverse)
+library(glmnet)
+library(pROC)
+library(broom)
+
+emo_dir <- "voiceData/9_ravdess_calm_angry"
+```
+
+---
+
+# Reading the Data
+
+## Reading the recordings from the folder
+
+All 192 clips live in `voiceData/9_ravdess_calm_angry/`. Exactly as in the workshop, we `list.files()` the folder and read every recording directly into a named `wav_list` with `readWave()`.
+
+```{r read-folder, warning=FALSE}
+emo_files <- list.files(emo_dir, pattern = "\\.wav$")
+length(emo_files)   # 192
+
+# Read every file into a named list (workshop pattern; name = filename without .wav)
+wav_list <- list()
+for (i in seq_along(emo_files)) {
+  name_key <- gsub("\\.wav$", "", emo_files[i])
+  wav_list[[name_key]] <- readWave(file.path(emo_dir, emo_files[i]))
+}
+
+# Inspect two Wave objects to confirm
+wav_list[[1]];wav_list[[192]]
+#listen(wav_list[[1]])
+#listen(wav_list[[192]])
+
+```
+
+## Parsing the design from filenames
+
+RAVDESS encodes the experimental design in a 7-part filename, e.g. `03-01-05-01-01-01-12.wav`. As in the workshop, reading the data means recovering that metadata. We list **every file in the folder** and parse it with base R (the same `gsub()` logic we used on the `ID_Emotion_Bar` corpus, adapted to the `-` separator).
+
+| Position | Field | Meaning |
+|---|---|---|
+| 3 | **Emotion** | 02 = calm, 05 = angry |
+| 4 | Intensity | 01 = normal, 02 = strong |
+| 5 | Statement | 01 = "Kids…" (the only one here) |
+| 7 | **Actor** | 01–24 (odd = male, even = female) |
+
+```{r parse-metadata}
+audioDat <- data.frame(file = emo_files, stringsAsFactors = FALSE)
+audioDat$emotion_code <- sapply(strsplit(audioDat$file, "-"), `[`, 3)
+audioDat$actor        <- as.integer(gsub("\\.wav$", "", sapply(strsplit(audioDat$file, "-"), `[`, 7)))
+audioDat$emotion      <- ifelse(audioDat$emotion_code == "02", "Calm", "Angry")
+audioDat$sex          <- ifelse(audioDat$actor %% 2 == 0, "Female", "Male")
+
+# The full folder is balanced across sex x emotion
+table(audioDat$sex, audioDat$emotion)
+```
+
+---
+
+::: {.callout-important}
+## Your task from here on
+The data is read in now in the previous steps. The rest of the pipeline is **yours to build** now. Work through the three sections below on your own, reusing the functions and patterns from our other workshop notebook. Each section lists ideas and directions — treat them more as ideas and initial suggestions but not as a checklist, and follow the threads you find most interesting!
+:::
+
+# Visualization & Pre-Processing
+
+*Goal: get to know the raw signal, then clean it so later measurements describe speech rather than noise or silence.*
+
+Ideas and directions to explore:
+
+- Pick one **calm** and one **angry** clip from the *same* actor. Plot their **oscillograms** and **spectrograms** side by side (`oscillo()`, `spectro()` with `flim`, `osc = TRUE`, `dB = "max0"`). What differs — amplitude, where the energy sits in frequency?
+- Because `oscillo()`/`spectro()` rescale each clip to its own maximum, side-by-side plots can hide a loudness difference. Try concatenating the two clips with `bind()` and plotting the combined wave on **one shared scale**. Does the shift become clearer?
+- Detect the **speech onset** (and possibly the **offset**) automatically with `timer()`, and mark it on the oscillogram with `abline()`. Do the detected times match what you *hear*? Watch for low-level recording artifacts in the lead-in.
+- Experiment with the `threshold` argument. What happens if it is too low (picks up noise) or too high (misses soft speech)? 
+- **Trim** the leading/trailing silence (`extractWave()` from onset to offset, or `noSilence()`), then **re-plot** to confirm the edit did what you intended.
+- Reflect: should you trim silence *before* extracting features? What could go wrong if you cut too aggressively?
+
+```{r visualization-preprocessing}
+# Your code here
+
+```
+
+# Feature Extraction
+
+*Goal: turn each recording into numbers. Build (at least) two complementary representations and consider combining them.*
+
+Ideas and directions to explore:
+
+- **Acoustic features:** run `voiceR::autoExtract()` (or the `analyze` function from `soundgen`) on your `wav_list` with `extended = TRUE`. Think carefully about the `fileNamePattern` and `sep` — the RAVDESS names use `-` and numeric codes, so you will need to map the emotion code to `Condition` and the actor to `ID` (and mark irrelevant positions as `Null`). Recode `Condition` into `Calm`/`Angry`.
+- Inspect the features by **feature family** (time, amplitude, frequency, spectral/voice-quality). Plot a few by emotion (e.g. `pitch_mean`, `loudness_mean`, `HNR_mean`, `pitch_sd`). Which families look most different for calm vs. angry?
+- Check **data quality**: any missing values? constant or all-`NA` columns? How will you handle them before modelling?
+- **Embeddings:** use `talk::talkEmbed()` to get a dense (768-dim) representation of each clip. This is slow one file at a time — consider a parallel loop / cluster as in the lecture
+- **Combine:** join the acoustic features and the embeddings into one table (key on the filename). You now have three representations to compare: acoustic-only, embeddings-only, and combined.
+- Reflect: which representation do you *expect* to work best for this arousal contrast, and why?
+
+```{r feature-extraction}
+# Your code here
+
+```
+
+# Modeling
+
+*Goal: use the features to predict calm vs. angry.*
+
+Ideas and directions to explore:
+
+- **Fit a classifier** to predict emotion from the acoustic features — e.g. logistic regression (`glm`) or a penalized/lasso version (`glmnet`), which also handles many correlated features. 
+- **Compare representations:** acoustic vs. embeddings vs. combined, using the *same* split and metric. Does the neural representation help? Does combining add anything?
+- **What predicts anger?** For an interpretable model, read off the selected/important features. Relate them to the arousal account (pitch, loudness, spectral energy, voice quality). Careful with correlated features when interpreting coefficient signs.
+- **Robustness / fairness:** does performance hold across subgroups — **female vs. male**, and **normal vs. strong** intensity? Where is the model weakest, and why might that be?
+- **Discuss generalization issues:** Can we trust these results if we would apply this model in other contexts? Why vs. why not?
+
+```{r modeling}
+# Your code here
+
+```
+
+---
+
+# References
+
+- Livingstone SR, Russo FA (2018). The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS). *PLoS ONE* 13(5): e0196391. <https://doi.org/10.1371/journal.pone.0196391>. Data: <https://doi.org/10.5281/zenodo.1188976>.
+
+---
+
+# Course Instructor & Contact:
+**Prof. Dr. Christian Hildebrand** <br>
+Full Professor of Marketing Analytics <br>
+Executive Director, Institute of Behavioral Science & Technology (IBT-HSG) <br> 
+University of St. Gallen <br><br>
+Email: [christian.hildebrand@unisg.ch](mailto:christian.hildebrand@unisg.ch) <br>
+Web: [ibt.unisg.ch](https://ibt.unisg.ch) | Social: [LinkedIn Profile](https://www.linkedin.com/in/christian-hildebrand/)
